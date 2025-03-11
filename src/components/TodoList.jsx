@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
 import './TodoListMediaQueries.css'; // Import the new CSS file
+import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService';
 
 const initialState = {
   todos: [],
@@ -37,8 +37,6 @@ const reducer = (state, action) => {
   }
 };
 
-const localHost = 'http://localhost:5001';
-
 const TodoList = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { todos, newTodoText, editId, editText } = state;
@@ -46,10 +44,10 @@ const TodoList = () => {
   const editInputRef = useRef(null);
 
   useEffect(() => {
-    const fetchTodos = async () => {
+    const fetchTodosData = async () => {
       try {
         console.log('Fetching todos...');
-        const response = await axios.get(`${localHost}/todos`);
+        const response = await fetchTodos();
         dispatch({ type: 'SET_TODOS', payload: response.data });
         console.log('Fetched todos:', response.data);
         if (addInputRef.current) {
@@ -60,7 +58,7 @@ const TodoList = () => {
       }
     };
 
-    fetchTodos();
+    fetchTodosData();
   }, []); // Ensure this useEffect runs only once on mount
 
   useEffect(() => {
@@ -69,11 +67,11 @@ const TodoList = () => {
     }
   }, [editId]);
 
-  const addTodo = async () => {
+  const addTodoHandler = async () => {
     if (newTodoText.trim()) {
       try {
         console.log('Adding new todo:', newTodoText);
-        const response = await axios.post(`${localHost}/todos`, { text: newTodoText });
+        const response = await addTodo(newTodoText);
         dispatch({ type: 'ADD_TODO', payload: response.data });
         console.log('Added new todo:', response.data);
         if (addInputRef.current) {
@@ -85,10 +83,10 @@ const TodoList = () => {
     }
   };
 
-  const toggleCompletion = async (id, completed) => {
+  const toggleCompletionHandler = async (id, completed) => {
     try {
       console.log('Toggling completion for todo:', id);
-      const response = await axios.put(`${localHost}/todos/${id}`, { completed: !completed });
+      const response = await toggleCompletion(id, completed);
       dispatch({ type: 'UPDATE_TODO', payload: response.data });
       console.log('Toggled completion for todo:', response.data);
     } catch (error) {
@@ -96,10 +94,10 @@ const TodoList = () => {
     }
   };
 
-  const deleteTodo = async (id) => {
+  const deleteTodoHandler = async (id) => {
     try {
       console.log('Deleting todo:', id);
-      await axios.delete(`${localHost}/todos/${id}`);
+      await deleteTodo(id);
       dispatch({ type: 'DELETE_TODO', payload: id });
       console.log('Deleted todo:', id);
     } catch (error) {
@@ -112,13 +110,13 @@ const TodoList = () => {
     dispatch({ type: 'SET_EDIT_TEXT', payload: todo.text }); // Ensure editText is set
   };
 
-  const saveEdit = async (id) => {
+  const saveEditHandler = async (id) => {
     if (editText.trim() && editText.trim() !== newTodoText.trim()) { // Ensure editText is different from newTodoText
       try {
         const todo = todos.find(todo => todo._id === id);
         const updatedTodo = { text: editText, completed: todo.completed };
         console.log('Saving edit for todo:', id, updatedTodo);
-        const response = await axios.put(`${localHost}/todos/${id}`, updatedTodo);
+        const response = await saveEdit(id, editText, todo.completed);
         dispatch({ type: 'UPDATE_TODO', payload: response.data });
         console.log('Saved edit for todo:', response.data);
       } catch (error) {
@@ -130,7 +128,7 @@ const TodoList = () => {
   const handleAddKeyDown = async (e) => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Prevent default form submission
-      await addTodo();
+      await addTodoHandler();
     } else if (e.key === 'Escape') {
       addInputRef.current.blur();
     }
@@ -139,7 +137,7 @@ const TodoList = () => {
   const handleEditKeyDown = async (e, id) => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Prevent default form submission
-      await saveEdit(id);
+      await saveEditHandler(id);
     } else if (e.key === 'Escape') {
       dispatch({ type: 'SET_EDIT_TODO', payload: { id: null, text: '' } });
     }
@@ -158,7 +156,7 @@ const TodoList = () => {
           onKeyDown={handleAddKeyDown}
           style={styles.input}
         />
-        <button onClick={addTodo} style={styles.button}>Add</button>
+        <button onClick={addTodoHandler} style={styles.button}>Add</button>
         <ul style={styles.list}>
           {todos.map(todo => (
             <li key={todo._id} style={styles.listItem}>
@@ -177,13 +175,13 @@ const TodoList = () => {
                 </span>
               )}
               {editId === todo._id ? (
-                <button onClick={() => saveEdit(todo._id)} style={styles.button}>Save</button>
+                <button onClick={() => saveEditHandler(todo._id)} style={styles.button}>Save</button>
               ) : (
-                <button onClick={() => toggleCompletion(todo._id, todo.completed)} style={styles.button}>
+                <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={styles.button}>
                   {todo.completed ? 'Mark Incomplete' : 'Mark Complete'}
                 </button>
               )}
-              <button onClick={() => deleteTodo(todo._id)} style={styles.button}>Delete</button>
+              <button onClick={() => deleteTodoHandler(todo._id)} style={styles.button}>Delete</button>
             </li>
           ))}
         </ul>
