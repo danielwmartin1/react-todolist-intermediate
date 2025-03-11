@@ -1,39 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import TodoItem from './components/TodoItem';
+import TodoList from './components/TodoList';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const res = await axios.get('/todos');
-      setTodos(res.data);
+      try {
+        const res = await axios.get('/todos');
+        setTodos(res.data);
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+      }
     };
     fetchTodos();
   }, []);
 
   const editTodo = async (id, task) => {
-    const res = await axios.put(`/editTodo/${id}`, { task });
-    setTodos(todos.map(todo => (todo._id === id ? res.data : todo)));
+    try {
+      const res = await axios.put(`/editTodo/${id}`, { task });
+      setTodos(todos.map(todo => (todo._id === id ? res.data : todo)));
+    } catch (error) {
+      console.error('Error editing todo:', error);
+    }
   };
 
   const completeTodo = async (id) => {
-    const res = await axios.put(`/completeTodo/${id}`);
-    setTodos(todos.map(todo => (todo._id === id ? res.data : todo)));
+    try {
+      const res = await axios.put(`/completeTodo/${id}`);
+      setTodos(todos.map(todo => (todo._id === id ? res.data : todo)));
+    } catch (error) {
+      console.error('Error completing todo:', error);
+    }
   };
 
   return (
     <div>
-      {/* ...existing code... */}
-      {todos.map(todo => (
-        <TodoItem
-          key={todo._id}
-          todo={todo}
-          onEdit={editTodo}
-          onComplete={completeTodo}
-        />
-      ))}
+      <TodoList todos={todos} onEdit={editTodo} onComplete={completeTodo} />
     </div>
   );
 };

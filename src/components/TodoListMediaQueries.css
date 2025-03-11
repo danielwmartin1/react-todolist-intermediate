@@ -88,5 +88,12 @@
     width: 100%;
     margin-bottom: 10px;
     font-size: 0.7rem;
+    border-bottom: 1px solid #ccc; /* Add bottom border */
   }
+}
+
+.timeStamps {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }

@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import Todo from './models/Todo.js';
 
 const app = express();
 app.use(cors());
@@ -12,12 +13,7 @@ dotenv.config();
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const todoSchema = new mongoose.Schema({
-  text: String,
-  completed: Boolean
-});
 
-const Todo = mongoose.model('Todo', todoSchema);
 
 app.get('/todos', async (req, res) => {
   const todos = await Todo.find();

@@ -3,6 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import './TodoListMediaQueries.css'; // Import the new CSS file
 import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService';
+import TodoItem from './TodoItem'; // Import the TodoItem component
 
 const initialState = {
   todos: [],
@@ -143,10 +144,9 @@ const TodoList = () => {
     }
   };
 
-  return (
-    <div style={styles.container}>
-      <Header />
-      <div style={styles.content}>
+  const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandler, dispatch }) => {
+    return (
+      <div style={styles.inputContainer}>
         <input
           ref={addInputRef}
           type="text"
@@ -157,9 +157,24 @@ const TodoList = () => {
           style={styles.input}
         />
         <button onClick={addTodoHandler} style={{ ...styles.button, backgroundColor: 'green' }}>Add</button>
+      </div>
+    );
+  };
+
+  return (
+    <div style={styles.container}>
+      <Header />
+      <div style={styles.content}>
+        <AddTaskForm
+          newTodoText={newTodoText}
+          addInputRef={addInputRef}
+          handleAddKeyDown={handleAddKeyDown}
+          addTodoHandler={addTodoHandler}
+          dispatch={dispatch}
+        />
         <ul style={styles.list}>
           {todos.map(todo => (
-            <li key={todo._id} style={styles.listItem}>
+            <li key={todo._id} style={{ ...styles.listItem, opacity: todo.completed ? 0.6 : 1 }}>
               {editId === todo._id ? (
                 <input
                   ref={editInputRef}
@@ -170,18 +185,21 @@ const TodoList = () => {
                   style={styles.input}
                 />
               ) : (
-                <span onClick={() => startEditing(todo)} style={styles.todoText}>
-                  {todo.text} - {todo.completed ? 'Completed' : 'Incomplete'}
+                <span onClick={() => startEditing(todo)} style={{ ...styles.todoText, textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                  {todo.text}
                 </span>
               )}
-              {editId === todo._id ? (
-                <button onClick={() => saveEditHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'blue' }}>Save</button>
-              ) : (
-                <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={{ ...styles.button, backgroundColor: 'purple' }}>
-                  {todo.completed ? 'Incomplete' : 'Complete'}
-                </button>
-              )}
-              <button onClick={() => deleteTodoHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'red' }}>Delete</button>
+              <TodoItem todo={todo} onEdit={startEditing} onComplete={toggleCompletionHandler} />
+              <div className="buttons" style={styles.buttons}>
+                {editId === todo._id ? (
+                  <button onClick={() => saveEditHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'blue' }}>Save</button>
+                ) : (
+                  <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={{ ...styles.button, backgroundColor: 'purple' }}>
+                    {todo.completed ? 'Incomplete' : 'Complete'}
+                  </button>
+                )}
+                <button onClick={() => deleteTodoHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'red' }}>Delete</button>
+              </div>
             </li>
           ))}
         </ul>
@@ -202,32 +220,48 @@ const styles = {
     padding: '20px',
     textAlign: 'center'
   },
+  inputContainer: {
+    display: 'grid',
+    gridTemplateColumns: '1fr auto',
+    gap: '10px',
+    marginBottom: '20px'
+  },
   input: {
     padding: '10px',
-    margin: '10px',
-    width: '80%'
+    width: '100%'
   },
   button: {
     padding: '10px',
-    margin: '10px',
-    fontSize: '0.7rem', // 20% smaller than the original 16px (16px * 0.8 = 12.8px)
-    width: '80px' // Set a fixed width for all buttons, 20% more narrow than 100px
+    fontSize: '0.7rem',
+    width: '80px'
   },
   list: {
     listStyleType: 'none',
-    padding: '0'
+    padding: '0',
+    display: 'grid',
+    gap: '10px'
   },
   listItem: {
-    margin: '10px 0',
-    display: 'flex',
-    justifyContent: 'space-between',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)', // 3 columns of equal size
+    gap: '10px',
     alignItems: 'center',
     textAlign: 'left',
+    borderBottom: '2px solid #ccc' // Add bottom border
   },
   todoText: {
-    flex: '1',
     cursor: 'pointer',
-    fontSize: '1rem' // 1.2 times the original button font size (16px * 1.2 = 19.2px)
+    fontSize: '1rem',
+    textAlign: 'left'
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '5px',
+    padding: '1rem',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
   }
 };
 
