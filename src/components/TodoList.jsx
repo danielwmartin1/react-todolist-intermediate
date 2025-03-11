@@ -5,6 +5,7 @@ import './TodoListMediaQueries.css'; // Import the new CSS file
 import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService';
 import TodoItem from './TodoItem'; // Import the TodoItem component
 import { TodoProvider } from '../context/TodoContext'; // Import the TodoProvider
+import AddTaskForm from './AddTaskForm'; // Import the AddTaskForm component
 
 const initialState = {
   todos: [],
@@ -137,9 +138,7 @@ const TodoList = () => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Prevent default form submission
       await addTodoHandler();
-    } else if (e.key === 'Escape') {
-      addInputRef.current.blur();
-    }
+    } 
   };
 
   const handleEditKeyDown = async (e, id) => {
@@ -170,23 +169,6 @@ const TodoList = () => {
 
   const filteredTodos = filterTodos(todos, searchText);
   const sortedTodos = sortTodos(filteredTodos, sortType);
-
-  const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandler, dispatch }) => {
-    return (
-      <div style={styles.inputContainer}>
-        <input
-          ref={addInputRef}
-          type="text"
-          value={newTodoText}
-          onChange={(e) => dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })}
-          placeholder="Add a new task"
-          onKeyDown={handleAddKeyDown}
-          style={{ ...styles.input, margin: '10px 0', width: '88%' }} // Add margin and reduce width
-        />
-        <button onClick={addTodoHandler} style={{ ...styles.button, backgroundColor: 'green', margin: '10px 0' }}>Add</button> {/* Add margin */}
-      </div>
-    );
-  };
 
   return (
     <TodoProvider state={state} dispatch={dispatch}>

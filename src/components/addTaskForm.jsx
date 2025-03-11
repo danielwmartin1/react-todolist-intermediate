@@ -16,3 +16,25 @@ const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandle
     </div>
   );
 };
+
+const styles = {
+  inputContainer: {
+    display: 'grid',
+    gridTemplateColumns: '1fr auto',
+    gap: '10px',
+    marginBottom: '20px'
+  },
+  input: {
+    padding: '10px',
+    width: '88%',
+    margin: '10px 0'
+  },
+  button: {
+    padding: '10px',
+    fontSize: '0.7rem',
+    width: '80px',
+    margin: '10px 0'
+  }
+};
+
+export default AddTaskForm;
