@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import './TodoListMediaQueries.css'; // Import the new CSS file
@@ -42,6 +42,8 @@ const reducer = (state, action) => {
 const TodoList = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { todos, newTodoText, editId, editText } = state;
+  const [searchText, setSearchText] = useState('');
+  const [sortType, setSortType] = useState('created');
   const addInputRef = useRef(null);
   const editInputRef = useRef(null);
 
@@ -145,6 +147,26 @@ const TodoList = () => {
     }
   };
 
+  const filterTodos = (todos, searchText) => {
+    return todos.filter(todo => todo.text.toLowerCase().includes(searchText.toLowerCase()));
+  };
+
+  const sortTodos = (todos, sortType) => {
+    return todos.slice().sort((a, b) => {
+      if (sortType === 'created') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else if (sortType === 'updated') {
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      } else if (sortType === 'completed') {
+        return new Date(b.completedAt) - new Date(a.completedAt);
+      }
+      return 0;
+    });
+  };
+
+  const filteredTodos = filterTodos(todos, searchText);
+  const sortedTodos = sortTodos(filteredTodos, sortType);
+
   const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandler, dispatch }) => {
     return (
       <div style={styles.inputContainer}>
@@ -155,9 +177,9 @@ const TodoList = () => {
           onChange={(e) => dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })}
           placeholder="Add a new task"
           onKeyDown={handleAddKeyDown}
-          style={styles.input}
+          style={{ ...styles.input, margin: '10px 0', width: '88%' }} // Add margin and reduce width
         />
-        <button onClick={addTodoHandler} style={{ ...styles.button, backgroundColor: 'green' }}>Add</button>
+        <button onClick={addTodoHandler} style={{ ...styles.button, backgroundColor: 'green', margin: '10px 0' }}>Add</button> {/* Add margin */}
       </div>
     );
   };
@@ -167,15 +189,31 @@ const TodoList = () => {
       <div style={styles.container}>
         <Header />
         <div style={styles.content}>
-          <AddTaskForm
-            newTodoText={newTodoText}
-            addInputRef={addInputRef}
-            handleAddKeyDown={handleAddKeyDown}
-            addTodoHandler={addTodoHandler}
-            dispatch={dispatch}
-          />
+          <div style={styles.inputWrapper}>
+            <AddTaskForm
+              newTodoText={newTodoText}
+              addInputRef={addInputRef}
+              handleAddKeyDown={handleAddKeyDown}
+              addTodoHandler={addTodoHandler}
+              dispatch={dispatch}
+            />
+            <div style={styles.filterSortContainer}>
+              <input
+                type="text"
+                placeholder="Search by title"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                style={{ ...styles.input, margin: '10px 0', width: '100%' }} // Add margin and reduce width
+              />
+              <select value={sortType} onChange={(e) => setSortType(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}> {/* Add margin */}
+                <option value="created">Sort by Created</option>
+                <option value="updated">Sort by Updated</option>
+                <option value="completed">Sort by Completed</option>
+              </select>
+            </div>
+          </div>
           <ul style={styles.list}>
-            {todos.map(todo => (
+            {sortedTodos.map(todo => (
               <li key={todo._id} style={{ ...styles.listItem, opacity: todo.completed ? 0.6 : 1 }}>
                 {editId === todo._id ? (
                   <input
@@ -223,15 +261,33 @@ const styles = {
     padding: '20px',
     textAlign: 'center'
   },
+  inputWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '20px'
+  },
   inputContainer: {
     display: 'grid',
     gridTemplateColumns: '1fr auto',
     gap: '10px',
     marginBottom: '20px'
   },
+  filterSortContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '10px',
+    marginBottom: '20px'
+  },
   input: {
     padding: '10px',
     width: '100%'
+  },
+  select: {
+    padding: '10px',
+    width: '200px'
   },
   button: {
     padding: '10px',
@@ -260,7 +316,7 @@ const styles = {
   buttons: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '5px',
+    gap: '10px',
     padding: '1rem',
     textAlign: 'center',
     justifyContent: 'center',
