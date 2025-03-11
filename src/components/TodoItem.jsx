@@ -1,6 +1,9 @@
 import React from 'react';
+import { useTodoDispatch } from '../context/TodoContext'; // Import the context
 
-const TodoItem = ({ todo }) => {
+const TodoItem = ({ todo, onEdit, onComplete }) => {
+  const dispatch = useTodoDispatch();
+
   return (
     <div style={styles.todoItem}>
       <div className="timeStamps" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>

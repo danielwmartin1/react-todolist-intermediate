@@ -13,8 +13,8 @@ dotenv.config();
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-
-
+app.get('/todos', async (req, res) => {
+  const todos =
 app.get('/todos', async (req, res) => {
   const todos = await Todo.find();
   res.json(todos);

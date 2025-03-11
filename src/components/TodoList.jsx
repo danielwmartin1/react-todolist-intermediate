@@ -4,6 +4,7 @@ import Footer from './Footer';
 import './TodoListMediaQueries.css'; // Import the new CSS file
 import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService';
 import TodoItem from './TodoItem'; // Import the TodoItem component
+import { TodoProvider } from '../context/TodoContext'; // Import the TodoProvider
 
 const initialState = {
   todos: [],
@@ -162,50 +163,52 @@ const TodoList = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <Header />
-      <div style={styles.content}>
-        <AddTaskForm
-          newTodoText={newTodoText}
-          addInputRef={addInputRef}
-          handleAddKeyDown={handleAddKeyDown}
-          addTodoHandler={addTodoHandler}
-          dispatch={dispatch}
-        />
-        <ul style={styles.list}>
-          {todos.map(todo => (
-            <li key={todo._id} style={{ ...styles.listItem, opacity: todo.completed ? 0.6 : 1 }}>
-              {editId === todo._id ? (
-                <input
-                  ref={editInputRef}
-                  type="text"
-                  value={editText}
-                  onChange={(e) => dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value })}
-                  onKeyDown={(e) => handleEditKeyDown(e, todo._id)}
-                  style={styles.input}
-                />
-              ) : (
-                <span onClick={() => startEditing(todo)} style={{ ...styles.todoText, textDecoration: todo.completed ? 'line-through' : 'none' }}>
-                  {todo.text}
-                </span>
-              )}
-              <TodoItem todo={todo} onEdit={startEditing} onComplete={toggleCompletionHandler} />
-              <div className="buttons" style={styles.buttons}>
+    <TodoProvider state={state} dispatch={dispatch}>
+      <div style={styles.container}>
+        <Header />
+        <div style={styles.content}>
+          <AddTaskForm
+            newTodoText={newTodoText}
+            addInputRef={addInputRef}
+            handleAddKeyDown={handleAddKeyDown}
+            addTodoHandler={addTodoHandler}
+            dispatch={dispatch}
+          />
+          <ul style={styles.list}>
+            {todos.map(todo => (
+              <li key={todo._id} style={{ ...styles.listItem, opacity: todo.completed ? 0.6 : 1 }}>
                 {editId === todo._id ? (
-                  <button onClick={() => saveEditHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'blue' }}>Save</button>
+                  <input
+                    ref={editInputRef}
+                    type="text"
+                    value={editText}
+                    onChange={(e) => dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value })}
+                    onKeyDown={(e) => handleEditKeyDown(e, todo._id)}
+                    style={styles.input}
+                  />
                 ) : (
-                  <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={{ ...styles.button, backgroundColor: 'purple' }}>
-                    {todo.completed ? 'Incomplete' : 'Complete'}
-                  </button>
+                  <span onClick={() => startEditing(todo)} style={{ ...styles.todoText, textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                    {todo.text}
+                  </span>
                 )}
-                <button onClick={() => deleteTodoHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'red' }}>Delete</button>
-              </div>
-            </li>
-          ))}
-        </ul>
+                <TodoItem todo={todo} onEdit={startEditing} onComplete={toggleCompletionHandler} />
+                <div className="buttons" style={styles.buttons}>
+                  {editId === todo._id ? (
+                    <button onClick={() => saveEditHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'blue' }}>Save</button>
+                  ) : (
+                    <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={{ ...styles.button, backgroundColor: 'purple' }}>
+                      {todo.completed ? 'Incomplete' : 'Complete'}
+                    </button>
+                  )}
+                  <button onClick={() => deleteTodoHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'red' }}>Delete</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </TodoProvider>
   );
 };
 
