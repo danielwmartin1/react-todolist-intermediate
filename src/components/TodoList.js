@@ -62,12 +62,12 @@ app.put('/todos/:id', async (req, res) => {
 
 app.patch('/todos/:id', async (req, res) => {
   const { id } = req.params;
-  const { completed } = req.body;
+  const { text, completed } = req.body;
 
   try {
     const updatedTodo = await Todo.findByIdAndUpdate(
       id,
-      { completed },
+      { text, completed },
       { new: true }
     );
     res.json(updatedTodo);

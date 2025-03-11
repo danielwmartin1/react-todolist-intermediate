@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import todosRoutes from './routes/todos.js';
 
 const app = express();
 const port = 5001;
@@ -12,15 +14,13 @@ app.use(express.json());
 // MongoDB connection
 dotenv.config();
 
-const mongoURI = process.env.MONGO_URI;
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+const uri = process.env.MONGODB_URI;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
-import todosRoutes from './routes/todos';
-import dotenv from 'dotenv';
-app.use('/todos', todosRoutes);
+app.use('/api', todosRoutes);
 
 // Start server
 app.listen(port, () => {

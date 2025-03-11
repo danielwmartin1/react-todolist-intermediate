@@ -1,66 +1,81 @@
 import express from 'express';
-import Todo from '../models/Todo';
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
-// Get all todos
-router.get('/', async (req, res) => {
-  try {
-    const todos = await Todo.find();
-    res.json(todos);
-  } catch (error) {
-    console.error('Error fetching todos:', error);
-    res.status(500).json({ message: 'Error fetching todos', error });
-  }
+const todoSchema = new mongoose.Schema({
+  text: String,
+  completed: Boolean
 });
 
-// Create a new todo
-router.post('/', async (req, res) => {
+const Todo = mongoose.model('Todo', todoSchema);
+
+router.get('/todos', async (req, res) => {
+  const todos = await Todo.find();
+  res.json(todos);
+});
+
+router.post('/todos', async (req, res) => {
+  const { text } = req.body;
+
   try {
-    const { text } = req.body;
-    const newTodo = new Todo({ text });
+    const newTodo = new Todo({
+      text,
+      completed: false
+    });
     await newTodo.save();
-    res.status(201).json(newTodo);
+    res.json(newTodo);
   } catch (error) {
-    console.error('Error creating todo:', error);
-    res.status(500).json({ message: 'Error creating todo', error });
+    res.status(500).send(error);
   }
 });
 
-// Update a todo
-router.put('/:id', async (req, res) => {
+router.put('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+  const { text } = req.body;
+
+  console.log(`Received PUT request to update todo with id: ${id}`);
+  console.log(`New text: ${text}`);
+
   try {
-    const { id } = req.params;
-    const { text, completed } = req.body;
-    console.log('Updating todo:', id, { text, completed });
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      id,
+      { text },
+      { new: true }
+    );
+    console.log(`Updated todo: ${updatedTodo}`);
+    res.json(updatedTodo);
+  } catch (error) {
+    console.error(`Error updating todo: ${error}`);
+    res.status(500).send(error);
+  }
+});
+
+router.patch('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+  const { text, completed } = req.body;
+
+  try {
     const updatedTodo = await Todo.findByIdAndUpdate(
       id,
       { text, completed },
       { new: true }
     );
-    if (!updatedTodo) {
-      return res.status(404).json({ message: 'Todo not found' });
-    }
     res.json(updatedTodo);
   } catch (error) {
-    console.error('Error updating todo:', error);
-    res.status(500).json({ message: 'Error updating todo', error });
+    res.status(500).send(error);
   }
 });
 
-// Delete a todo
-router.delete('/:id', async (req, res) => {
+router.delete('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
-    const deletedTodo = await Todo.findByIdAndDelete(id);
-    if (!deletedTodo) {
-      return res.status(404).json({ message: 'Todo not found' });
-    }
-    res.json({ message: 'Todo deleted' });
+    await Todo.findByIdAndDelete(id);
+    res.status(204).send();
   } catch (error) {
-    console.error('Error deleting todo:', error);
-    res.status(500).json({ message: 'Error deleting todo', error });
-  }
+    res.status(500).send(error);
+  } 
 });
 
 export default router;

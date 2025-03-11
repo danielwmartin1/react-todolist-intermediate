@@ -15,7 +15,7 @@ const reducer = (state, action) => {
     case 'SET_NEW_TODO_TEXT':
       return { ...state, newTodoText: action.payload };
     case 'SET_EDIT_TODO':
-      return { ...state, editTodo: action.payload, editText: action.payload.text };
+      return { ...state, editTodo: action.payload, editText: action.payload?.text || '' };
     case 'SET_EDIT_TEXT':
       return { ...state, editText: action.payload };
     case 'ADD_TODO':
@@ -56,7 +56,7 @@ const TodoList = () => {
     };
 
     fetchTodos();
-  }, []);
+  }, []); // Ensure this useEffect runs only once on mount
 
   useEffect(() => {
     if (editTodo && editInputRef.current) {
@@ -109,7 +109,7 @@ const TodoList = () => {
 
   const saveEdit = async (id) => {
     console.log('Attempting to save edit for todo:', id, editText);
-    if (editText !== editTodo.text) {
+    if (editText.trim() && editText !== editTodo.text) {
       try {
         console.log('Saving edit for todo:', id, editText);
         const response = await axios.put(`http://localhost:5001/todos/${id}`, { text: editText });
