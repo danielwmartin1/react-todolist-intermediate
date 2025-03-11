@@ -271,15 +271,16 @@ const styles = {
   input: {
     padding: '10px',
     width: '100%',
-    backgroundColor: '#f9f9f9', // Add background color
+    backgroundColor: 'white', // Set background color to white
     borderRadius: '6px', // Add border-radius
+    color: 'black' // Set text color to black
   },
   select: {
     padding: '10px',
     width: '200px',
-    backgroundColor: '#f9f9f9', // Add background color
-    color: '#333', // Add text color
-    borderRadius: '6px', // Add border-radius
+    backgroundColor: 'white', // Set background color to white
+    color: 'black', // Set text color to black
+    borderRadius: '6px' // Add border-radius
   },
   button: {
     padding: '10px',

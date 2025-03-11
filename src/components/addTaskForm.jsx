@@ -42,8 +42,10 @@ const styles = {
     width: '87.5%',
     margin: '10px 0',
     borderRadius: '6px', // added border-radius
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fff', // added background color
+    color: '#333', // added text color
     height: '40px', // set height
+
   },
   button: {
     padding: '10px',
