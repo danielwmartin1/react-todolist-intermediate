@@ -217,7 +217,8 @@ const styles = {
     margin: '10px 0',
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    textAlign: 'left',
   },
   todoText: {
     flex: '1',
