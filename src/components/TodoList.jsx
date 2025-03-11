@@ -5,7 +5,7 @@ import './TodoListMediaQueries.css'; // Import the new CSS file
 import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService';
 import TodoItem from './TodoItem'; // Import the TodoItem component
 import { TodoProvider } from '../context/TodoContext'; // Import the TodoProvider
-import AddTaskForm from './AddTaskForm.jsx'; // Ensure the import path is correct
+import AddTaskForm from './AddTaskForm'; // Ensure the import path is correct
 
 const initialState = {
   todos: [],
