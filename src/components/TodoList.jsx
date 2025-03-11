@@ -12,8 +12,10 @@ const TodoList = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       try {
+        console.log('Fetching todos...');
         const response = await axios.get('http://localhost:5001/todos');
         setTodos(response.data);
+        console.log('Fetched todos:', response.data);
         if (addInputRef.current) {
           addInputRef.current.focus();
         }
@@ -34,9 +36,11 @@ const TodoList = () => {
   const addTodo = async () => {
     if (newTodoText.trim()) {
       try {
+        console.log('Adding new todo:', newTodoText);
         const response = await axios.post('http://localhost:5001/todos', { text: newTodoText });
         setTodos([...todos, response.data]);
         setNewTodoText('');
+        console.log('Added new todo:', response.data);
         if (addInputRef.current) {
           addInputRef.current.focus();
         }
@@ -48,8 +52,10 @@ const TodoList = () => {
 
   const toggleCompletion = async (id, completed) => {
     try {
+      console.log('Toggling completion for todo:', id);
       const response = await axios.put(`http://localhost:5001/todos/${id}`, { completed: !completed });
       setTodos(todos.map(todo => (todo._id === id ? response.data : todo)));
+      console.log('Toggled completion for todo:', response.data);
     } catch (error) {
       console.error('Error toggling completion:', error);
     }
@@ -57,38 +63,38 @@ const TodoList = () => {
 
   const deleteTodo = async (id) => {
     try {
+      console.log('Deleting todo:', id);
       await axios.delete(`http://localhost:5001/todos/${id}`);
       setTodos(todos.filter(todo => todo._id !== id));
+      console.log('Deleted todo:', id);
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
   };
 
   const startEditing = (todo) => {
+    console.log('Starting to edit todo:', todo);
     setEditTodo(todo);
     setEditText(todo.text);
   };
 
   const saveEdit = async (id) => {
+    console.log('Attempting to save edit for todo:', id, editText);
     if (editText !== editTodo.text) {
       try {
+        console.log('Saving edit for todo:', id, editText);
         const response = await axios.put(`http://localhost:5001/todos/${id}`, { text: editText });
         setTodos(todos.map(todo => (todo._id === id ? response.data : todo)));
         setEditTodo(null);
         setEditText('');
+        console.log('Saved edit for todo:', response.data);
       } catch (error) {
         console.error('Error saving edit:', error);
       }
     } else {
+      console.log('No changes detected, cancelling edit.');
       setEditTodo(null);
       setEditText('');
-    }
-  };
-
-  const handleKeyDown = async (e, id) => {
-    if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent default form submission
-      await saveEdit(id);
     }
   };
 
@@ -120,17 +126,19 @@ const TodoList = () => {
                 type="text"
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
-                onBlur={() => saveEdit(todo._id)}
-                onKeyDown={(e) => handleKeyDown(e, todo._id)}
               />
             ) : (
               <span onClick={() => startEditing(todo)}>
                 {todo.text} - {todo.completed ? 'Completed' : 'Incomplete'}
               </span>
             )}
-            <button onClick={() => toggleCompletion(todo._id, todo.completed)}>
-              {todo.completed ? 'Mark Incomplete' : 'Mark Complete'}
-            </button>
+            {editTodo && editTodo._id === todo._id ? (
+              <button onClick={() => saveEdit(todo._id)}>Save</button>
+            ) : (
+              <button onClick={() => toggleCompletion(todo._id, todo.completed)}>
+                {todo.completed ? 'Mark Incomplete' : 'Mark Complete'}
+              </button>
+            )}
             <button onClick={() => deleteTodo(todo._id)}>Delete</button>
           </li>
         ))}

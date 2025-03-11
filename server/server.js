@@ -29,30 +29,38 @@ const todoSchema = new mongoose.Schema({
 const Todo = mongoose.model('Todo', todoSchema);
 
 app.get('/todos', async (req, res) => {
+  console.log('Fetching todos...');
   const todos = await Todo.find();
+  console.log('Fetched todos:', todos);
   res.json(todos);
 });
 
 app.post('/todos', async (req, res) => {
+  console.log('Adding new todo:', req.body.text);
   const newTodo = new Todo({
     text: req.body.text,
     completed: false,
   });
   await newTodo.save();
+  console.log('Added new todo:', newTodo);
   res.json(newTodo);
 });
 
 app.put('/todos/:id', async (req, res) => {
+  console.log('Updating todo:', req.params.id, req.body);
   const updatedTodo = await Todo.findByIdAndUpdate(
     req.params.id,
-    { completed: req.body.completed },
+    { text: req.body.text, completed: req.body.completed },
     { new: true }
   );
+  console.log('Updated todo:', updatedTodo);
   res.json(updatedTodo);
 });
 
 app.delete('/todos/:id', async (req, res) => {
+  console.log('Deleting todo:', req.params.id);
   await Todo.findByIdAndDelete(req.params.id);
+  console.log('Deleted todo:', req.params.id);
   res.json({ message: 'Todo deleted' });
 });
 
