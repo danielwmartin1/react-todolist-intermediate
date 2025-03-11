@@ -265,20 +265,27 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     gap: '10px',
-    marginBottom: '20px'
+    marginBottom: '20px',
+    borderRadius: '6px', // Add border-radius
   },
   input: {
     padding: '10px',
-    width: '100%'
+    width: '100%',
+    backgroundColor: '#f9f9f9', // Add background color
+    borderRadius: '6px', // Add border-radius
   },
   select: {
     padding: '10px',
-    width: '200px'
+    width: '200px',
+    backgroundColor: '#f9f9f9', // Add background color
+    color: '#333', // Add text color
+    borderRadius: '6px', // Add border-radius
   },
   button: {
     padding: '10px',
     fontSize: '0.7rem',
-    width: '80px'
+    width: '80px',
+    borderRadius: '6px', // Add border-radius
   },
   list: {
     listStyleType: 'none',
