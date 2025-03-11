@@ -1,11 +1,42 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import axios from 'axios';
 
+const initialState = {
+  todos: [],
+  newTodoText: '',
+  editTodo: null,
+  editText: ''
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_TODOS':
+      return { ...state, todos: action.payload };
+    case 'SET_NEW_TODO_TEXT':
+      return { ...state, newTodoText: action.payload };
+    case 'SET_EDIT_TODO':
+      return { ...state, editTodo: action.payload, editText: action.payload.text };
+    case 'SET_EDIT_TEXT':
+      return { ...state, editText: action.payload };
+    case 'ADD_TODO':
+      return { ...state, todos: [...state.todos, action.payload], newTodoText: '' };
+    case 'UPDATE_TODO':
+      return {
+        ...state,
+        todos: state.todos.map(todo => (todo._id === action.payload._id ? action.payload : todo)),
+        editTodo: null,
+        editText: ''
+      };
+    case 'DELETE_TODO':
+      return { ...state, todos: state.todos.filter(todo => todo._id !== action.payload) };
+    default:
+      return state;
+  }
+};
+
 const TodoList = () => {
-  const [todos, setTodos] = useState([]);
-  const [newTodoText, setNewTodoText] = useState('');
-  const [editTodo, setEditTodo] = useState(null);
-  const [editText, setEditText] = useState('');
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { todos, newTodoText, editTodo, editText } = state;
   const editInputRef = useRef(null);
   const addInputRef = useRef(null);
 
@@ -14,7 +45,7 @@ const TodoList = () => {
       try {
         console.log('Fetching todos...');
         const response = await axios.get('http://localhost:5001/todos');
-        setTodos(response.data);
+        dispatch({ type: 'SET_TODOS', payload: response.data });
         console.log('Fetched todos:', response.data);
         if (addInputRef.current) {
           addInputRef.current.focus();
@@ -38,8 +69,7 @@ const TodoList = () => {
       try {
         console.log('Adding new todo:', newTodoText);
         const response = await axios.post('http://localhost:5001/todos', { text: newTodoText });
-        setTodos([...todos, response.data]);
-        setNewTodoText('');
+        dispatch({ type: 'ADD_TODO', payload: response.data });
         console.log('Added new todo:', response.data);
         if (addInputRef.current) {
           addInputRef.current.focus();
@@ -54,7 +84,7 @@ const TodoList = () => {
     try {
       console.log('Toggling completion for todo:', id);
       const response = await axios.put(`http://localhost:5001/todos/${id}`, { completed: !completed });
-      setTodos(todos.map(todo => (todo._id === id ? response.data : todo)));
+      dispatch({ type: 'UPDATE_TODO', payload: response.data });
       console.log('Toggled completion for todo:', response.data);
     } catch (error) {
       console.error('Error toggling completion:', error);
@@ -65,7 +95,7 @@ const TodoList = () => {
     try {
       console.log('Deleting todo:', id);
       await axios.delete(`http://localhost:5001/todos/${id}`);
-      setTodos(todos.filter(todo => todo._id !== id));
+      dispatch({ type: 'DELETE_TODO', payload: id });
       console.log('Deleted todo:', id);
     } catch (error) {
       console.error('Error deleting todo:', error);
@@ -74,8 +104,7 @@ const TodoList = () => {
 
   const startEditing = (todo) => {
     console.log('Starting to edit todo:', todo);
-    setEditTodo(todo);
-    setEditText(todo.text);
+    dispatch({ type: 'SET_EDIT_TODO', payload: todo });
   };
 
   const saveEdit = async (id) => {
@@ -84,17 +113,14 @@ const TodoList = () => {
       try {
         console.log('Saving edit for todo:', id, editText);
         const response = await axios.put(`http://localhost:5001/todos/${id}`, { text: editText });
-        setTodos(todos.map(todo => (todo._id === id ? response.data : todo)));
-        setEditTodo(null);
-        setEditText('');
+        dispatch({ type: 'UPDATE_TODO', payload: response.data });
         console.log('Saved edit for todo:', response.data);
       } catch (error) {
         console.error('Error saving edit:', error);
       }
     } else {
       console.log('No changes detected, cancelling edit.');
-      setEditTodo(null);
-      setEditText('');
+      dispatch({ type: 'SET_EDIT_TODO', payload: null });
     }
   };
 
@@ -112,7 +138,7 @@ const TodoList = () => {
         ref={addInputRef}
         type="text"
         value={newTodoText}
-        onChange={(e) => setNewTodoText(e.target.value)}
+        onChange={(e) => dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })}
         placeholder="Add a new task"
         onKeyDown={handleAddKeyDown}
       />
@@ -125,7 +151,7 @@ const TodoList = () => {
                 ref={editInputRef}
                 type="text"
                 value={editText}
-                onChange={(e) => setEditText(e.target.value)}
+                onChange={(e) => dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value })}
               />
             ) : (
               <span onClick={() => startEditing(todo)}>
