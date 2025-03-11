@@ -1,5 +1,7 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 import axios from 'axios';
+import Header from './Header';
+import Footer from './Footer';
 
 const initialState = {
   todos: [],
@@ -132,45 +134,86 @@ const TodoList = () => {
   };
 
   return (
-    <div>
-      <h1>Todo List</h1>
-      <input
-        ref={addInputRef}
-        type="text"
-        value={newTodoText}
-        onChange={(e) => dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })}
-        placeholder="Add a new task"
-        onKeyDown={handleAddKeyDown}
-      />
-      <button onClick={addTodo}>Add</button>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo._id}>
-            {editTodo && editTodo._id === todo._id ? (
-              <input
-                ref={editInputRef}
-                type="text"
-                value={editText}
-                onChange={(e) => dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value })}
-              />
-            ) : (
-              <span onClick={() => startEditing(todo)}>
-                {todo.text} - {todo.completed ? 'Completed' : 'Incomplete'}
-              </span>
-            )}
-            {editTodo && editTodo._id === todo._id ? (
-              <button onClick={() => saveEdit(todo._id)}>Save</button>
-            ) : (
-              <button onClick={() => toggleCompletion(todo._id, todo.completed)}>
-                {todo.completed ? 'Mark Incomplete' : 'Mark Complete'}
-              </button>
-            )}
-            <button onClick={() => deleteTodo(todo._id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+    <div style={styles.container}>
+      <Header />
+      <div style={styles.content}>
+        <input
+          ref={addInputRef}
+          type="text"
+          value={newTodoText}
+          onChange={(e) => dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })}
+          placeholder="Add a new task"
+          onKeyDown={handleAddKeyDown}
+          style={styles.input}
+        />
+        <button onClick={addTodo} style={styles.button}>Add</button>
+        <ul style={styles.list}>
+          {todos.map(todo => (
+            <li key={todo._id} style={styles.listItem}>
+              {editTodo && editTodo._id === todo._id ? (
+                <input
+                  ref={editInputRef}
+                  type="text"
+                  value={editText}
+                  onChange={(e) => dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value })}
+                  style={styles.input}
+                />
+              ) : (
+                <span onClick={() => startEditing(todo)} style={styles.todoText}>
+                  {todo.text} - {todo.completed ? 'Completed' : 'Incomplete'}
+                </span>
+              )}
+              {editTodo && editTodo._id === todo._id ? (
+                <button onClick={() => saveEdit(todo._id)} style={styles.button}>Save</button>
+              ) : (
+                <button onClick={() => toggleCompletion(todo._id, todo.completed)} style={styles.button}>
+                  {todo.completed ? 'Mark Incomplete' : 'Mark Complete'}
+                </button>
+              )}
+              <button onClick={() => deleteTodo(todo._id)} style={styles.button}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Footer />
     </div>
   );
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh'
+  },
+  content: {
+    flex: '1',
+    padding: '20px',
+    textAlign: 'center'
+  },
+  input: {
+    padding: '10px',
+    margin: '10px',
+    width: '80%'
+  },
+  button: {
+    padding: '10px',
+    margin: '10px'
+  },
+  list: {
+    listStyleType: 'none',
+    padding: '0'
+  },
+  listItem: {
+    margin: '10px 0',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  todoText: {
+    flex: '1',
+    cursor: 'pointer'
+  }
 };
 
 export default TodoList;
