@@ -118,6 +118,10 @@ const TodoList = () => {
     if (editText.trim() && editText.trim() !== newTodoText.trim()) { // Ensure editText is different from newTodoText
       try {
         const todo = todos.find(todo => todo._id === id);
+        if (editText.trim() === todo.text.trim()) { // Exit editing if editText is the same as the original text
+          dispatch({ type: 'SET_EDIT_TODO', payload: { id: null, text: '' } });
+          return;
+        }
         const updatedTodo = { text: editText, completed: todo.completed };
         console.log('Saving edit for todo:', id, updatedTodo);
         const response = await saveEdit(id, editText, todo.completed);
