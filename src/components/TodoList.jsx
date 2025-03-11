@@ -37,6 +37,8 @@ const reducer = (state, action) => {
   }
 };
 
+const localHost = 'http://localhost:5001';
+
 const TodoList = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { todos, newTodoText, editId, editText } = state;
@@ -47,7 +49,7 @@ const TodoList = () => {
     const fetchTodos = async () => {
       try {
         console.log('Fetching todos...');
-        const response = await axios.get('http://localhost:5001/todos');
+        const response = await axios.get(`${localHost}/todos`);
         dispatch({ type: 'SET_TODOS', payload: response.data });
         console.log('Fetched todos:', response.data);
         if (addInputRef.current) {
@@ -71,7 +73,7 @@ const TodoList = () => {
     if (newTodoText.trim()) {
       try {
         console.log('Adding new todo:', newTodoText);
-        const response = await axios.post('http://localhost:5001/todos', { text: newTodoText });
+        const response = await axios.post(`${localHost}/todos`, { text: newTodoText });
         dispatch({ type: 'ADD_TODO', payload: response.data });
         console.log('Added new todo:', response.data);
         if (addInputRef.current) {
@@ -86,7 +88,7 @@ const TodoList = () => {
   const toggleCompletion = async (id, completed) => {
     try {
       console.log('Toggling completion for todo:', id);
-      const response = await axios.put(`http://localhost:5001/todos/${id}`, { completed: !completed });
+      const response = await axios.put(`${localHost}/todos/${id}`, { completed: !completed });
       dispatch({ type: 'UPDATE_TODO', payload: response.data });
       console.log('Toggled completion for todo:', response.data);
     } catch (error) {
@@ -97,7 +99,7 @@ const TodoList = () => {
   const deleteTodo = async (id) => {
     try {
       console.log('Deleting todo:', id);
-      await axios.delete(`http://localhost:5001/todos/${id}`);
+      await axios.delete(`${localHost}/todos/${id}`);
       dispatch({ type: 'DELETE_TODO', payload: id });
       console.log('Deleted todo:', id);
     } catch (error) {
@@ -115,7 +117,7 @@ const TodoList = () => {
         const todo = todos.find(todo => todo._id === id);
         const updatedTodo = { text: editText, completed: todo.completed };
         console.log('Saving edit for todo:', id, updatedTodo);
-        const response = await axios.put(`http://localhost:5001/todos/${id}`, updatedTodo);
+        const response = await axios.put(`${localHost}/todos/${id}`, updatedTodo);
         dispatch({ type: 'UPDATE_TODO', payload: response.data });
         console.log('Saved edit for todo:', response.data);
       } catch (error) {
