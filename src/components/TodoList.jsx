@@ -45,6 +45,7 @@ const TodoList = () => {
   const { todos, newTodoText, editId, editText } = state;
   const [searchText, setSearchText] = useState('');
   const [sortType, setSortType] = useState('created');
+  const [sortOrder, setSortOrder] = useState('asc'); // Add state for sort order
   const addInputRef = useRef(null);
   const editInputRef = useRef(null);
 
@@ -154,21 +155,22 @@ const TodoList = () => {
     return todos.filter(todo => todo.text.toLowerCase().includes(searchText.toLowerCase()));
   };
 
-  const sortTodos = (todos, sortType) => {
+  const sortTodos = (todos, sortType, sortOrder) => {
     return todos.slice().sort((a, b) => {
+      let comparison = 0;
       if (sortType === 'created') {
-        return new Date(b.createdAt) - new Date(a.createdAt);
+        comparison = new Date(a.createdAt) - new Date(b.createdAt);
       } else if (sortType === 'updated') {
-        return new Date(b.updatedAt) - new Date(a.updatedAt);
+        comparison = new Date(a.updatedAt) - new Date(b.updatedAt);
       } else if (sortType === 'completed') {
-        return new Date(b.completedAt) - new Date(a.completedAt);
+        comparison = new Date(a.completedAt) - new Date(b.completedAt);
       }
-      return 0;
+      return sortOrder === 'asc' ? comparison : -comparison;
     });
   };
 
   const filteredTodos = filterTodos(todos, searchText);
-  const sortedTodos = sortTodos(filteredTodos, sortType);
+  const sortedTodos = sortTodos(filteredTodos, sortType, sortOrder);
 
   return (
     <TodoProvider state={state} dispatch={dispatch}>
@@ -195,6 +197,10 @@ const TodoList = () => {
                 <option value="created">Sort by Created</option>
                 <option value="updated">Sort by Updated</option>
                 <option value="completed">Sort by Completed</option>
+              </select>
+              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}> {/* Add margin */}
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
               </select>
             </div>
           </div>
@@ -280,7 +286,8 @@ const styles = {
     width: '200px',
     backgroundColor: 'white', // Set background color to white
     color: 'black', // Set text color to black
-    borderRadius: '6px' // Add border-radius
+    borderRadius: '6px', // Add border-radius
+    margin: '10px 0' // Add margin
   },
   button: {
     padding: '10px',
