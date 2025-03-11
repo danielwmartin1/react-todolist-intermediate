@@ -109,10 +109,11 @@ const TodoList = () => {
 
   const startEditing = (todo) => {
     dispatch({ type: 'SET_EDIT_TODO', payload: { id: todo._id, text: todo.text } });
+    dispatch({ type: 'SET_EDIT_TEXT', payload: todo.text }); // Ensure editText is set
   };
 
   const saveEdit = async (id) => {
-    if (editText.trim()) {
+    if (editText.trim() && editText.trim() !== newTodoText.trim()) { // Ensure editText is different from newTodoText
       try {
         const todo = todos.find(todo => todo._id === id);
         const updatedTodo = { text: editText, completed: todo.completed };
@@ -210,7 +211,8 @@ const styles = {
   },
   button: {
     padding: '10px',
-    margin: '10px'
+    margin: '10px',
+    fontSize: '12.8px' // 20% smaller than the original 16px (16px * 0.8 = 12.8px)
   },
   list: {
     listStyleType: 'none',
@@ -225,7 +227,8 @@ const styles = {
   },
   todoText: {
     flex: '1',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    fontSize: '19.2px' // 1.2 times the original button font size (16px * 1.2 = 19.2px)
   }
 };
 
