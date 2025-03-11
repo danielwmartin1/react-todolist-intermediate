@@ -24,35 +24,3 @@ app.get('/todos', async (req, res) => {
 app.listen(5001, () => {
   console.log('Server is running on port 5001');
 });
-```
-```javascript
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-
-const TodoList = () => {
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const response = await axios.get('http://localhost:5001/todos');
-      setTodos(response.data);
-    };
-
-    fetchTodos();
-  }, []);
-
-  return (
-    <div>
-      <h1>Todo List</h1>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo._id}>
-            {todo.text} - {todo.completed ? 'Completed' : 'Incomplete'}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default TodoList;
