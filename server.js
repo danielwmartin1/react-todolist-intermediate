@@ -20,7 +20,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
-app.use('/api', todosRoutes);
+app.use('/api', todosRoutes); // Use app instead of router
 
 // Start server
 app.listen(port, () => {

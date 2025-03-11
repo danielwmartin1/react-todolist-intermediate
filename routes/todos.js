@@ -1,10 +1,10 @@
 import express from 'express';
 import Todo from '../models/todo.js';
 
-const router = express.Router();
+const app = express.Router(); // Change router to app
 
 // Get all todos
-router.get('/todos', async (req, res) => {
+app.get('/todos', async (req, res) => {
     try {
         const todos = await Todo.find();
         res.json(todos);
@@ -14,7 +14,7 @@ router.get('/todos', async (req, res) => {
 });
 
 // Add a new todo
-router.post('/todos', async (req, res) => {
+app.post('/todos', async (req, res) => {
     const todo = new Todo({
         text: req.body.text,
         completed: false
@@ -29,7 +29,7 @@ router.post('/todos', async (req, res) => {
 });
 
 // Update a todo
-router.put('/todos/:id', async (req, res) => {
+app.put('/todos/:id', async (req, res) => {
     try {
         const todo = await Todo.findById(req.params.id);
         if (!todo) {
@@ -47,7 +47,7 @@ router.put('/todos/:id', async (req, res) => {
 });
 
 // Delete a todo
-router.delete('/todos/:id', async (req, res) => {
+app.delete('/todos/:id', async (req, res) => {
     try {
         const todo = await Todo.findById(req.params.id);
         if (!todo) {
@@ -61,4 +61,4 @@ router.delete('/todos/:id', async (req, res) => {
     }
 });
 
-export default router;
+export default app; // Change router to app
