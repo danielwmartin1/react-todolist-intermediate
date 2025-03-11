@@ -127,6 +127,8 @@ const TodoList = () => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Prevent default form submission
       await addTodo();
+    } else if (e.key === 'Escape') {
+      addInputRef.current.blur();
     }
   };
 
@@ -134,6 +136,8 @@ const TodoList = () => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Prevent default form submission
       await saveEdit(id);
+    } else if (e.key === 'Escape') {
+      dispatch({ type: 'SET_EDIT_TODO', payload: { id: null, text: '' } });
     }
   };
 
