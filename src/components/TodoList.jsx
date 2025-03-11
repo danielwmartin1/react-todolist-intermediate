@@ -6,7 +6,7 @@ import Footer from './Footer';
 const initialState = {
   todos: [],
   newTodoText: '',
-  editTodo: null,
+  editId: null,
   editText: ''
 };
 
@@ -16,17 +16,17 @@ const reducer = (state, action) => {
       return { ...state, todos: action.payload };
     case 'SET_NEW_TODO_TEXT':
       return { ...state, newTodoText: action.payload };
-    case 'SET_EDIT_TODO':
-      return { ...state, editTodo: action.payload, editText: action.payload?.text || '' };
-    case 'SET_EDIT_TEXT':
-      return { ...state, editText: action.payload };
     case 'ADD_TODO':
       return { ...state, todos: [...state.todos, action.payload], newTodoText: '' };
+    case 'SET_EDIT_TODO':
+      return { ...state, editId: action.payload.id, editText: action.payload.text };
+    case 'SET_EDIT_TEXT':
+      return { ...state, editText: action.payload };
     case 'UPDATE_TODO':
       return {
         ...state,
         todos: state.todos.map(todo => (todo._id === action.payload._id ? action.payload : todo)),
-        editTodo: null,
+        editId: null,
         editText: ''
       };
     case 'DELETE_TODO':
@@ -38,9 +38,9 @@ const reducer = (state, action) => {
 
 const TodoList = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { todos, newTodoText, editTodo, editText } = state;
-  const editInputRef = useRef(null);
+  const { todos, newTodoText, editId, editText } = state;
   const addInputRef = useRef(null);
+  const editInputRef = useRef(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -61,10 +61,10 @@ const TodoList = () => {
   }, []); // Ensure this useEffect runs only once on mount
 
   useEffect(() => {
-    if (editTodo && editInputRef.current) {
+    if (editId && editInputRef.current) {
       editInputRef.current.focus();
     }
-  }, [editTodo]);
+  }, [editId]);
 
   const addTodo = async () => {
     if (newTodoText.trim()) {
@@ -105,24 +105,21 @@ const TodoList = () => {
   };
 
   const startEditing = (todo) => {
-    console.log('Starting to edit todo:', todo);
-    dispatch({ type: 'SET_EDIT_TODO', payload: todo });
+    dispatch({ type: 'SET_EDIT_TODO', payload: { id: todo._id, text: todo.text } });
   };
 
   const saveEdit = async (id) => {
-    console.log('Attempting to save edit for todo:', id, editText);
-    if (editText.trim() && editText !== editTodo.text) {
+    if (editText.trim()) {
       try {
-        console.log('Saving edit for todo:', id, editText);
-        const response = await axios.put(`http://localhost:5001/todos/${id}`, { text: editText });
+        const todo = todos.find(todo => todo._id === id);
+        const updatedTodo = { text: editText, completed: todo.completed };
+        console.log('Saving edit for todo:', id, updatedTodo);
+        const response = await axios.put(`http://localhost:5001/todos/${id}`, updatedTodo);
         dispatch({ type: 'UPDATE_TODO', payload: response.data });
         console.log('Saved edit for todo:', response.data);
       } catch (error) {
         console.error('Error saving edit:', error);
       }
-    } else {
-      console.log('No changes detected, cancelling edit.');
-      dispatch({ type: 'SET_EDIT_TODO', payload: null });
     }
   };
 
@@ -130,6 +127,13 @@ const TodoList = () => {
     if (e.key === 'Enter') {
       e.preventDefault(); // Prevent default form submission
       await addTodo();
+    }
+  };
+
+  const handleEditKeyDown = async (e, id) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent default form submission
+      await saveEdit(id);
     }
   };
 
@@ -150,12 +154,13 @@ const TodoList = () => {
         <ul style={styles.list}>
           {todos.map(todo => (
             <li key={todo._id} style={styles.listItem}>
-              {editTodo && editTodo._id === todo._id ? (
+              {editId === todo._id ? (
                 <input
                   ref={editInputRef}
                   type="text"
                   value={editText}
                   onChange={(e) => dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value })}
+                  onKeyDown={(e) => handleEditKeyDown(e, todo._id)}
                   style={styles.input}
                 />
               ) : (
@@ -163,7 +168,7 @@ const TodoList = () => {
                   {todo.text} - {todo.completed ? 'Completed' : 'Incomplete'}
                 </span>
               )}
-              {editTodo && editTodo._id === todo._id ? (
+              {editId === todo._id ? (
                 <button onClick={() => saveEdit(todo._id)} style={styles.button}>Save</button>
               ) : (
                 <button onClick={() => toggleCompletion(todo._id, todo.completed)} style={styles.button}>

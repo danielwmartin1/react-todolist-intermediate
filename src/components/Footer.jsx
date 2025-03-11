@@ -3,7 +3,7 @@ import React from 'react';
 const Footer = () => {
   return (
     <footer style={styles.footer}>
-      <p>&copy; 2023 Todo List App</p>
+      <p>Daniel Martin &copy; {new Date().getFullYear()}</p>
     </footer>
   );
 };
@@ -14,9 +14,7 @@ const styles = {
     padding: '10px',
     color: 'white',
     textAlign: 'center',
-    position: 'fixed',
-    width: '100%',
-    bottom: '0'
+    width: '100%'
   }
 };
 
