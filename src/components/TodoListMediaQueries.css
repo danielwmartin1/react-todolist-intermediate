@@ -13,9 +13,6 @@
     margin: 8px 0;
   }
 
-  li {
-    font-size: 1rem;
-  }
 }
 
 @media (max-width: 768px) {
@@ -32,8 +29,8 @@
     margin: 7px 0;
   }
 
-  li {
-    font-size: 0.85em;
+  .todoText {
+    font-size: 0.85rem;
   }
 }
 
@@ -49,6 +46,10 @@
   .button {
     width: 100%;
     margin: 5px 0;
+  }
+
+  .todoText {
+    font-size: 0.7rem;
   }
 
   li {

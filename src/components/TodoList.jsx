@@ -212,7 +212,7 @@ const styles = {
   button: {
     padding: '10px',
     margin: '10px',
-    fontSize: '12.8px' // 20% smaller than the original 16px (16px * 0.8 = 12.8px)
+    fontSize: '0.7rem' // 20% smaller than the original 16px (16px * 0.8 = 12.8px)
   },
   list: {
     listStyleType: 'none',
@@ -228,7 +228,7 @@ const styles = {
   todoText: {
     flex: '1',
     cursor: 'pointer',
-    fontSize: '19.2px' // 1.2 times the original button font size (16px * 1.2 = 19.2px)
+    fontSize: '1rem' // 1.2 times the original button font size (16px * 1.2 = 19.2px)
   }
 };
 
