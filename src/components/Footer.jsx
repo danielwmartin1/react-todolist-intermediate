@@ -14,7 +14,8 @@ const styles = {
     padding: '10px',
     color: 'white',
     textAlign: 'center',
-    width: '100%'
+    width: '100%',
+    borderTop: '3px ridge aqua'
   }
 };
 

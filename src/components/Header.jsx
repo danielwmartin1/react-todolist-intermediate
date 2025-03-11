@@ -15,7 +15,8 @@ const styles = {
     backgroundColor: '#282c34',
     color: 'white',
     textAlign: 'center',
-    width: '100vw'
+    width: '100vw',
+    borderBottom: '3px ridge aqua'
   },
   link: {
     color: 'inherit',
