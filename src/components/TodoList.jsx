@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 
 const TodoList = () => {
@@ -6,12 +6,17 @@ const TodoList = () => {
   const [newTodoText, setNewTodoText] = useState('');
   const [editTodo, setEditTodo] = useState(null);
   const [editText, setEditText] = useState('');
+  const editInputRef = useRef(null);
+  const addInputRef = useRef(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
         const response = await axios.get('http://localhost:5001/todos');
         setTodos(response.data);
+        if (addInputRef.current) {
+          addInputRef.current.focus();
+        }
       } catch (error) {
         console.error('Error fetching todos:', error);
       }
@@ -20,12 +25,21 @@ const TodoList = () => {
     fetchTodos();
   }, []);
 
+  useEffect(() => {
+    if (editTodo && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  }, [editTodo]);
+
   const addTodo = async () => {
     if (newTodoText.trim()) {
       try {
         const response = await axios.post('http://localhost:5001/todos', { text: newTodoText });
         setTodos([...todos, response.data]);
         setNewTodoText('');
+        if (addInputRef.current) {
+          addInputRef.current.focus();
+        }
       } catch (error) {
         console.error('Error adding todo:', error);
       }
@@ -89,6 +103,7 @@ const TodoList = () => {
     <div>
       <h1>Todo List</h1>
       <input
+        ref={addInputRef}
         type="text"
         value={newTodoText}
         onChange={(e) => setNewTodoText(e.target.value)}
@@ -101,6 +116,7 @@ const TodoList = () => {
           <li key={todo._id}>
             {editTodo && editTodo._id === todo._id ? (
               <input
+                ref={editInputRef}
                 type="text"
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
