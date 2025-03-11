@@ -156,7 +156,7 @@ const TodoList = () => {
           onKeyDown={handleAddKeyDown}
           style={styles.input}
         />
-        <button onClick={addTodoHandler} style={styles.button}>Add</button>
+        <button onClick={addTodoHandler} style={{ ...styles.button, backgroundColor: 'green' }}>Add</button>
         <ul style={styles.list}>
           {todos.map(todo => (
             <li key={todo._id} style={styles.listItem}>
@@ -175,13 +175,13 @@ const TodoList = () => {
                 </span>
               )}
               {editId === todo._id ? (
-                <button onClick={() => saveEditHandler(todo._id)} style={styles.button}>Save</button>
+                <button onClick={() => saveEditHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'blue' }}>Save</button>
               ) : (
-                <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={styles.button}>
-                  {todo.completed ? 'Mark Incomplete' : 'Mark Complete'}
+                <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={{ ...styles.button, backgroundColor: 'purple' }}>
+                  {todo.completed ? 'Incomplete' : 'Complete'}
                 </button>
               )}
-              <button onClick={() => deleteTodoHandler(todo._id)} style={styles.button}>Delete</button>
+              <button onClick={() => deleteTodoHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'red' }}>Delete</button>
             </li>
           ))}
         </ul>
@@ -210,7 +210,8 @@ const styles = {
   button: {
     padding: '10px',
     margin: '10px',
-    fontSize: '0.7rem' // 20% smaller than the original 16px (16px * 0.8 = 12.8px)
+    fontSize: '0.7rem', // 20% smaller than the original 16px (16px * 0.8 = 12.8px)
+    width: '80px' // Set a fixed width for all buttons, 20% more narrow than 100px
   },
   list: {
     listStyleType: 'none',

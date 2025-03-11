@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+input {
+  border-radius: 6px;
+}
+
+button {
+  border-radius: 6px;
+  transition: transform 0.2s !important;
+}
+
+button:hover {
+  transform: scale(1.05) !important;
+}
+
+button:active {
+  transform: scale(0.95) !important;
+}
