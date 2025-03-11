@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useRef } from 'react';
 import axios from 'axios';
 import Header from './Header';
 import Footer from './Footer';
+import './TodoListMediaQueries.css'; // Import the new CSS file
 
 const initialState = {
   todos: [],
