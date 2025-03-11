@@ -78,8 +78,11 @@ const TodoList = () => {
       try {
         console.log('Adding new todo:', newTodoText);
         const response = await addTodo(newTodoText);
-        dispatch({ type: 'ADD_TODO', payload: response.data });
-        console.log('Added new todo:', response.data);
+        const newTodo = response.data;
+        const updatedTodos = [newTodo, ...todos]; // Add new todo to the top of the list
+        dispatch({ type: 'SET_TODOS', payload: updatedTodos });
+        dispatch({ type: 'SET_NEW_TODO_TEXT', payload: '' });
+        console.log('Added new todo:', newTodo);
         if (addInputRef.current) {
           addInputRef.current.focus();
         }
