@@ -1,28 +1,43 @@
-import express from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv'; // Import dotenv
-import todosRoutes from './routes/todos.js';
 
-const app = express();
-const port = process.env.PORT || 5001;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// MongoDB connection
-dotenv.config(); // Ensure dotenv is configured
-
-const uri = process.env.MONGODB_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-// Routes
-app.use('/api', todosRoutes); // Use app instead of router
-
-// Start server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const todoSchema = new mongoose.Schema({
+  text: {
+    type: String,
+    required: true,
+  },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    get: (v) => v ? new Date(v).toISOString() : null,
+  },
+  updatedAt: {
+    type: Date,
+    get: (v) => v ? new Date(v).toISOString() : null,
+  },
+  completedAt: {
+    type: Date,
+    get: (v) => v ? new Date(v).toISOString() : null,
+  },
 });
+
+todoSchema.pre('save', function(next) {
+  if (this.isNew) {
+    this.createdAt = Date.now();
+  } else {
+    this.updatedAt = Date.now();
+  }
+
+  if (this.isModified('completed')) {
+    this.completedAt = this.completed ? Date.now() : null;
+  }
+
+  next();
+});
+
+const Todo = mongoose.model('Todo', todoSchema);
+
+export default Todo;

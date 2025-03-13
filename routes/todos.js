@@ -1,64 +1,67 @@
-import express from 'express';
-import Todo from '../models/todo.js';
+import React, { useState } from 'react';
 
-const app = express.Router(); // Change router to app
+const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandler, dispatch }) => {
+  const [buttonStyle, setButtonStyle] = useState(styles.button);
 
-// Get all todos
-app.get('/todos', async (req, res) => {
-    try {
-        const todos = await Todo.find();
-        res.json(todos);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
+  return (
+    <div style={styles.inputContainer}>
+      <input
+        ref={addInputRef}
+        type="text"
+        value={newTodoText}
+        onChange={(e) => dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })}
+        placeholder="Add a new task"
+        onKeyDown={handleAddKeyDown}
+        style={styles.input}
+      />
+      <button
+        onClick={addTodoHandler}
+        style={{ ...buttonStyle, backgroundColor: 'green' }}
+        onMouseEnter={() => setButtonStyle({ ...styles.button, ...styles.buttonHover })}
+        onMouseLeave={() => setButtonStyle(styles.button)}
+        onMouseDown={() => setButtonStyle({ ...styles.button, ...styles.buttonActive })}
+        onMouseUp={() => setButtonStyle({ ...styles.button, ...styles.buttonHover })}
+      >
+        Add
+      </button>
+    </div>
+  );
+};
 
-// Add a new todo
-app.post('/todos', async (req, res) => {
-    const todo = new Todo({
-        text: req.body.text,
-        completed: false
-    });
+const styles = {
+  inputContainer: {
+    display: 'grid',
+    gridTemplateColumns: '1fr auto',
+    gap: '10px',
+    marginBottom: '20px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  input: {
+    padding: '0 10px', // increased by 50%
+    width: '87.5%',
+    margin: '10px 0',
+    borderRadius: '6px', // added border-radius
+    backgroundColor: '#fff', // added background color
+    color: '#333', // added text color
+    height: '40px', // set height
 
-    try {
-        const newTodo = await todo.save();
-        res.status(201).json(newTodo);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
+  },
+  button: {
+    padding: '10px',
+    fontSize: '0.7rem',
+    width: '80px',
+    margin: '10px 0',
+    borderRadius: '6px', // added border-radius
+    height: '40px', // set height
+    transition: 'transform 0.2s', // added transition for transform
+  },
+  buttonHover: {
+    transform: 'scale(1.05)', // scale up on hover
+  },
+  buttonActive: {
+    transform: 'scale(0.95)', // scale down on active
+  }
+};
 
-// Update a todo
-app.put('/todos/:id', async (req, res) => {
-    try {
-        const todo = await Todo.findById(req.params.id);
-        if (!todo) {
-            return res.status(404).json({ message: 'Todo not found' });
-        }
-
-        todo.text = req.body.text !== undefined ? req.body.text : todo.text;
-        todo.completed = req.body.completed !== undefined ? req.body.completed : todo.completed;
-
-        const updatedTodo = await todo.save();
-        res.json(updatedTodo);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-// Delete a todo
-app.delete('/todos/:id', async (req, res) => {
-    try {
-        const todo = await Todo.findById(req.params.id);
-        if (!todo) {
-            return res.status(404).json({ message: 'Todo not found' });
-        }
-
-        await todo.remove();
-        res.json({ message: 'Todo deleted' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-export default app; // Change router to app
+export default AddTaskForm;

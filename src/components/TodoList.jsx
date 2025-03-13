@@ -6,6 +6,7 @@ import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../
 import TodoItem from './TodoItem'; // Import the TodoItem component
 import { TodoProvider } from '../context/TodoContext'; // Import the TodoProvider
 import AddTaskForm from './AddTaskForm'; // Ensure the import path is correct
+import TodoListItems from './TodoListItems.jsx'; // Ensure the correct extension is used
 
 const initialState = {
   todos: [],
@@ -43,7 +44,19 @@ const reducer = (state, action) => {
   }
 };
 
-const TodoList = () => {
+const TodoList = ({ todos, startEditing, toggleCompletionHandler }) => {
+  return (
+    <div>
+      <TodoListItems
+        todos={todos}
+        startEditing={startEditing}
+        toggleCompletionHandler={toggleCompletionHandler}
+      />
+    </div>
+  );
+};
+
+const TodoListContainer = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { todos, newTodoText, editId, editText } = state;
   const [searchText, setSearchText] = useState('');
@@ -210,37 +223,18 @@ const TodoList = () => {
               </select>
             </div>
           </div>
-          <ul style={{ ...styles.list, backgroundImage: 'url("blue-brick.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}>
-            {sortedTodos.map(todo => (
-              <li key={todo._id} style={{ ...styles.listItem, opacity: todo.completed ? 0.6 : 1 }}>
-                {editId === todo._id ? (
-                  <input
-                    ref={editInputRef}
-                    type="text"
-                    value={editText}
-                    onChange={(e) => dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value })}
-                    onKeyDown={(e) => handleEditKeyDown(e, todo._id)}
-                    style={styles.input}
-                  />
-                ) : (
-                  <span onClick={() => startEditing(todo)} style={{ ...styles.todoText, textDecoration: todo.completed ? 'line-through' : 'none' }}>
-                    {todo.text}
-                  </span>
-                )}
-                <TodoItem todo={todo} onEdit={startEditing} onComplete={toggleCompletionHandler} />
-                <div className="buttons" style={styles.buttons}>
-                  {editId === todo._id ? (
-                    <button onClick={() => saveEditHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'blue' }}>Save</button>
-                  ) : (
-                    <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={{ ...styles.button, backgroundColor: 'purple' }}>
-                      {todo.completed ? 'Incomplete' : 'Complete'}
-                    </button>
-                  )}
-                  <button onClick={() => deleteTodoHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'red' }}>Delete</button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <TodoListItems
+            sortedTodos={sortedTodos}
+            editId={editId}
+            editText={editText}
+            editInputRef={editInputRef}
+            handleEditKeyDown={handleEditKeyDown}
+            startEditing={startEditing}
+            saveEditHandler={saveEditHandler}
+            toggleCompletionHandler={toggleCompletionHandler}
+            deleteTodoHandler={deleteTodoHandler}
+            dispatch={dispatch}
+          />
         </div>
         <Footer />
       </div>
@@ -334,4 +328,4 @@ const styles = {
   }
 };
 
-export default TodoList;
+export default TodoListContainer;

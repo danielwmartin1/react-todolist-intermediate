@@ -1,12 +1,22 @@
 import React from 'react';
-import TodoList from './components/TodoList.jsx'; // Updated import to TodoList.jsx
+import TodoListContainer from './components/TodoListContainer.jsx'; // Updated import to TodoListContainer
 
 function App() {
+  console.log('App component rendered'); // Debugging statement
   return (
-    <div className="App">
-      <TodoList /> {/* Display TodoList component */}
+    <div className="App" style={styles.app}>
+      <TodoListContainer /> {/* Display TodoListContainer component */}
     </div>
   );
 }
+
+const styles = {
+  app: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+};
 
 export default App;

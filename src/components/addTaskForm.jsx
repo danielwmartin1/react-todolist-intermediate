@@ -9,7 +9,9 @@ const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandle
         ref={addInputRef}
         type="text"
         value={newTodoText}
-        onChange={(e) => dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })}
+        onChange={(e) => {
+          dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value });
+        }}
         placeholder="Add a new task"
         onKeyDown={handleAddKeyDown}
         style={styles.input}
