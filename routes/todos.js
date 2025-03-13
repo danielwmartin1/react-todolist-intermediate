@@ -54,7 +54,7 @@ const styles = {
     margin: '10px 0',
     borderRadius: '6px', // added border-radius
     height: '40px', // set height
-    transition: 'transform 0.2s', // added transition for transform
+    transition: 'transform 0.1s', // added transition for transform
   },
   buttonHover: {
     transform: 'scale(1.05)', // scale up on hover

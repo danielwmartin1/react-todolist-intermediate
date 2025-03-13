@@ -283,7 +283,8 @@ const styles = {
     textAlign: 'center',
     backgroundImage: 'url("src/components/black.jpg")',
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center'
+    backgroundPosition: 'center',
+    backgroundSize: 'contain', // Make the React symbol smaller
   },
   inputWrapper: {
     display: 'flex',

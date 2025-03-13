@@ -330,7 +330,7 @@ const styles = {
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'flex-end'
-  }
+  },
 };
 
 export default TodoListContainer;

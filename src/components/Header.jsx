@@ -4,7 +4,7 @@ const Header = () => {
   return (
     <header style={styles.header}>
       <h1>
-        <a href="/" style={styles.link}>Todo List</a>
+        <a href="/" style={styles.link}><img src="src\components\react.svg" alt="React Logo" /> Intermediate To-Do List</a>
       </h1>
     </header>
   );
@@ -17,7 +17,7 @@ const styles = {
     textAlign: 'center',
     width: '100vw',
     borderBottom: '3px ridge aqua',
-    zIndex: 1000
+    zIndex: '1000'
   },
   link: {
     color: 'inherit',

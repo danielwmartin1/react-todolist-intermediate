@@ -39,18 +39,20 @@ const TodoItem = ({ todo, onEdit, onComplete, onDelete, isEditing, editText, han
           <button onClick={() => {
             console.log('Save button clicked for todo:', todo); // Debugging statement
             saveEditHandler(todo._id);
-          }} style={{ ...styles.button, backgroundColor: 'blue' }}>Save</button>
+          }} style={{ ...styles.button, backgroundColor: 'blue', width: '140px' }}>Save</button> {/* Updated width */}
         </div>
       ) : (
         <>
           <span style={{ ...styles.todoText, textDecoration: todo.completed ? 'line-through' : 'none' }}>{todo.text}</span>
           {todo.createdAt && (
-            <div style={{ ...styles.timestamps, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.8rem' }}>Created: {new Date(todo.createdAt).toLocaleString()}</span>
-              {todo.updatedAt && todo.updatedAt !== todo.createdAt && (
-                <span style={{ fontSize: '0.8rem' }}>Updated: {new Date(todo.updatedAt).toLocaleString()}</span>
-              )}
-              <span style={{ fontSize: '0.8rem' }}>{todo.completed ? `Completed: ${new Date(todo.updatedAt).toLocaleString()}` : ''}</span>
+            <div style={styles.timestampsContainer}>
+              <div style={styles.timestamps}>
+                <span style={{ fontSize: '0.8rem' }}>Created: {new Date(todo.createdAt).toLocaleString()}</span>
+                {todo.updatedAt && todo.updatedAt !== todo.createdAt && (
+                  <span style={{ fontSize: '0.8rem' }}>Updated: {new Date(todo.updatedAt).toLocaleString()}</span>
+                )}
+                <span style={{ fontSize: '0.8rem' }}>{todo.completed ? `Completed: ${new Date(todo.updatedAt).toLocaleString()}` : ''}</span>
+              </div>
             </div>
           )}
         </>
@@ -112,8 +114,8 @@ const styles = {
   button: {
     padding: '10px',
     borderRadius: '6px',
-    width: '80px',
-    fontSize: '0.7rem',
+    width: '100px', // Standardize button width
+    fontSize: '0.8rem', // Standardize font size
     transition: 'transform 0.1s', // added transition for transform
     cursor: 'pointer', // Add pointer cursor for buttons
     ':hover': {
@@ -128,8 +130,20 @@ const styles = {
     alignItems: 'center',
     gap: '10px', // Add some space between input and button
   },
+  timestampsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    textAlign: 'left',
+  },
   timestamps: {
-    // ...existing code...
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    textAlign: 'left',
+    gap: '5px', // Add some gap between timestamp items
   },
 };
 

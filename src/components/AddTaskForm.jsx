@@ -53,7 +53,7 @@ const styles = {
   button: {
     padding: '10px',
     fontSize: '0.7rem',
-    width: '80px',
+    width: '100px',
     margin: '10px', // added margin to the
     borderRadius: '6px', // added border-radius
     height: '40px', // set height
