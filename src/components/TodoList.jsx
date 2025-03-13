@@ -11,7 +11,10 @@ const initialState = {
   todos: [],
   newTodoText: '',
   editId: null,
-  editText: ''
+  editText: '',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  completedAt: null
 };
 
 const reducer = (state, action) => {
@@ -207,7 +210,7 @@ const TodoList = () => {
               </select>
             </div>
           </div>
-          <ul style={styles.list}>
+          <ul style={{ ...styles.list, backgroundImage: 'url("blue-brick.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}>
             {sortedTodos.map(todo => (
               <li key={todo._id} style={{ ...styles.listItem, opacity: todo.completed ? 0.6 : 1 }}>
                 {editId === todo._id ? (
@@ -254,7 +257,10 @@ const styles = {
   content: {
     flex: '1',
     padding: '20px',
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundImage: 'url("src/components/black.jpg")', // Add background image
+    backgroundRepeat: 'no-repeat', // Prevent background repeat
+    backgroundPosition: 'center' // Center the background image
   },
   inputWrapper: {
     display: 'flex',
@@ -302,7 +308,7 @@ const styles = {
     listStyleType: 'none',
     padding: '0',
     display: 'grid',
-    gap: '10px'
+    gap: '10px',
   },
   listItem: {
     display: 'grid',

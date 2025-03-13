@@ -15,7 +15,8 @@ const styles = {
     color: 'white',
     textAlign: 'center',
     width: '100%',
-    borderTop: '3px ridge aqua'
+    borderTop: '3px ridge aqua',
+    zIndex: 1000
   }
 };
 
