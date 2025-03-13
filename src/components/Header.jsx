@@ -4,7 +4,12 @@ const Header = () => {
   return (
     <header style={styles.header}>
       <h1>
-        <a href="/" style={styles.link}><img src="src\components\react.svg" alt="React Logo" /> Intermediate To-Do List</a>
+        <a href="/" style={styles.link}>
+          <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <img src="src/components/react.svg" alt="icon" style={{ width: '100px', marginRight: '1rem' }} />
+            Intermediate To-Do List
+          </span>
+        </a>
       </h1>
     </header>
   );
