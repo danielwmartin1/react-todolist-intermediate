@@ -306,7 +306,7 @@ const styles = {
   },
   listItem: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)', // 3 columns of equal size
+    gridTemplateColumns: 'repeat(4, 1fr)', // 3 columns of equal size
     gap: '10px',
     alignItems: 'center',
     textAlign: 'left',

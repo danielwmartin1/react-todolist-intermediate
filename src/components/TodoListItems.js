@@ -57,7 +57,7 @@ const styles = {
   },
   listItem: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(4 1fr)',
     gap: '10px',
     alignItems: 'center',
     textAlign: 'left',
