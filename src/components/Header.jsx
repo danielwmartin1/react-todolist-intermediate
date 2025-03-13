@@ -12,7 +12,6 @@ const Header = () => {
 
 const styles = {
   header: {
-    backgroundColor: '#282c34',
     color: 'white',
     textAlign: 'center',
     width: '100vw',
