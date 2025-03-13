@@ -94,7 +94,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    padding: '10px',
+    padding: '1rem',
     borderBottom: '2px solid #ccc', // Add bottom border
   },
   checkboxContainer: {
