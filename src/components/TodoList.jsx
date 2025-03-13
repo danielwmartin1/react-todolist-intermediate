@@ -1,12 +1,12 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import './TodoListMediaQueries.css'; // Import the new CSS file
+import './TodoListMediaQueries.css';
 import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService';
-import TodoItem from './TodoItem'; // Import the TodoItem component
-import { TodoProvider } from '../context/TodoContext'; // Import the TodoProvider
-import AddTaskForm from './AddTaskForm'; // Ensure the import path is correct
-import TodoListItems from './TodoListItems.jsx'; // Ensure the correct extension is used
+import TodoItem from './TodoItem';
+import { TodoProvider } from '../context/TodoContext';
+import AddTaskForm from './AddTaskForm';
+import TodoListItems from './TodoListItems.jsx';
 
 const initialState = {
   todos: [],
@@ -44,15 +44,45 @@ const reducer = (state, action) => {
   }
 };
 
-const TodoList = ({ todos, startEditing, toggleCompletionHandler }) => {
+const TodoList = ({ todos, onEdit, onComplete, onDelete }) => {
+  const [editText, setEditText] = useState('');
+  const [isEditing] = useState(null);
+
+  const handleEditChange = (e) => {
+    setEditText(e.target.value);
+  };
+
+  const handleEditKeyDown = (e, id) => {
+    if (e.key === 'Enter') {
+      saveEditHandler(id);
+    }
+  };
+
+  const saveEditHandler = (id) => {
+    onEdit(id, editText);
+  };
+
+  const handleDelete = (id) => {
+    onDelete(id);
+  };
+
   return (
-    <div>
-      <TodoListItems
-        todos={todos}
-        startEditing={startEditing}
-        toggleCompletionHandler={toggleCompletionHandler}
-      />
-    </div>
+    <ul>
+      {todos.map((todo) => (
+        <TodoItem
+          key={todo._id}
+          todo={todo}
+          onEdit={onEdit}
+          onComplete={onComplete}
+          onDelete={handleDelete}
+          isEditing={isEditing === todo._id}
+          editText={editText}
+          handleEditChange={handleEditChange}
+          handleEditKeyDown={handleEditKeyDown}
+          saveEditHandler={saveEditHandler}
+        />
+      ))}
+    </ul>
   );
 };
 
@@ -61,7 +91,7 @@ const TodoListContainer = () => {
   const { todos, newTodoText, editId, editText } = state;
   const [searchText, setSearchText] = useState('');
   const [sortType, setSortType] = useState('created');
-  const [sortOrder, setSortOrder] = useState('asc'); // Add state for sort order
+  const [sortOrder, setSortOrder] = useState('asc');
   const addInputRef = useRef(null);
   const editInputRef = useRef(null);
 
@@ -79,9 +109,8 @@ const TodoListContainer = () => {
         console.error('Error fetching todos:', error);
       }
     };
-
     fetchTodosData();
-  }, []); // Ensure this useEffect runs only once on mount
+  }, []);
 
   useEffect(() => {
     if (editId && editInputRef.current) {
@@ -95,7 +124,7 @@ const TodoListContainer = () => {
         console.log('Adding new todo:', newTodoText);
         const response = await addTodo(newTodoText);
         const newTodo = response.data;
-        const updatedTodos = [newTodo, ...todos]; // Add new todo to the top of the list
+        const updatedTodos = [newTodo, ...todos];
         dispatch({ type: 'SET_TODOS', payload: updatedTodos });
         dispatch({ type: 'SET_NEW_TODO_TEXT', payload: '' });
         console.log('Added new todo:', newTodo);
@@ -132,14 +161,14 @@ const TodoListContainer = () => {
 
   const startEditing = (todo) => {
     dispatch({ type: 'SET_EDIT_TODO', payload: { id: todo._id, text: todo.text } });
-    dispatch({ type: 'SET_EDIT_TEXT', payload: todo.text }); // Ensure editText is set
+    dispatch({ type: 'SET_EDIT_TEXT', payload: todo.text });
   };
 
   const saveEditHandler = async (id) => {
-    if (editText.trim() && editText.trim() !== newTodoText.trim()) { // Ensure editText is different from newTodoText
+    if (editText.trim() && editText.trim() !== newTodoText.trim()) {
       try {
         const todo = todos.find(todo => todo._id === id);
-        if (editText.trim() === todo.text.trim()) { // Exit editing if editText is the same as the original text
+        if (editText.trim() === todo.text.trim()) {
           dispatch({ type: 'SET_EDIT_TODO', payload: { id: null, text: '' } });
           return;
         }
@@ -156,14 +185,14 @@ const TodoListContainer = () => {
 
   const handleAddKeyDown = async (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
       await addTodoHandler();
-    } 
+    }
   };
 
   const handleEditKeyDown = async (e, id) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
       await saveEditHandler(id);
     } else if (e.key === 'Escape') {
       dispatch({ type: 'SET_EDIT_TODO', payload: { id: null, text: '' } });
@@ -210,14 +239,14 @@ const TodoListContainer = () => {
                 placeholder="Search by title"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                style={{ ...styles.input, margin: '10px 0', width: '100%' }} // Add margin and reduce width
+                style={{ ...styles.input, margin: '10px 0', width: '100%' }}
               />
-              <select value={sortType} onChange={(e) => setSortType(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}> {/* Add margin */}
+              <select value={sortType} onChange={(e) => setSortType(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}>
                 <option value="created">Sort by Created</option>
                 <option value="updated">Sort by Updated</option>
                 <option value="completed">Sort by Completed</option>
               </select>
-              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}> {/* Add margin */}
+              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}>
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>
@@ -252,9 +281,9 @@ const styles = {
     flex: '1',
     padding: '20px',
     textAlign: 'center',
-    backgroundImage: 'url("src/components/black.jpg")', // Add background image
-    backgroundRepeat: 'no-repeat', // Prevent background repeat
-    backgroundPosition: 'center' // Center the background image
+    backgroundImage: 'url("src/components/black.jpg")',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center'
   },
   inputWrapper: {
     display: 'flex',
@@ -275,42 +304,44 @@ const styles = {
     alignItems: 'center',
     gap: '10px',
     marginBottom: '20px',
-    borderRadius: '6px', // Add border-radius
+    borderRadius: '6px'
   },
   input: {
     padding: '10px',
     width: '100%',
-    backgroundColor: 'white', // Set background color to white
-    borderRadius: '6px', // Add border-radius
-    color: 'black' // Set text color to black
+    backgroundColor: 'white',
+    borderRadius: '6px',
+    color: 'black'
   },
   select: {
     padding: '10px',
     width: '200px',
-    backgroundColor: 'white', // Set background color to white
-    color: 'black', // Set text color to black
-    borderRadius: '6px', // Add border-radius
-    margin: '10px 0' // Add margin
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '6px',
+    margin: '10px 0'
   },
   button: {
     padding: '10px',
-    fontSize: '0.7rem',
-    width: '80px',
-    borderRadius: '6px', // Add border-radius
+    fontSize: '0.8rem', // Standardize font size
+    width: '100px', // Standardize button width
+    borderRadius: '6px',
+    transition: 'transform 0.2s',
+    cursor: 'pointer'
   },
   list: {
     listStyleType: 'none',
     padding: '0',
     display: 'grid',
-    gap: '10px',
+    gap: '10px'
   },
   listItem: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)', // 3 columns of equal size
+    gridTemplateColumns: 'repeat(4, 1fr)',
     gap: '10px',
     alignItems: 'center',
     textAlign: 'left',
-    borderBottom: '2px solid #ccc' // Add bottom border
+    borderBottom: '2px solid #ccc'
   },
   todoText: {
     cursor: 'pointer',

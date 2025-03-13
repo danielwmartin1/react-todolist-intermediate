@@ -37,12 +37,13 @@ const styles = {
     gap: '10px',
     marginBottom: '20px',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding:`10px`
   },
   input: {
     padding: '0 10px', // increased by 50%
     width: '87.5%',
-    margin: '10px 0',
+    margin: '0px',
     borderRadius: '6px', // added border-radius
     backgroundColor: '#fff', // added background color
     color: '#333', // added text color
@@ -53,10 +54,10 @@ const styles = {
     padding: '10px',
     fontSize: '0.7rem',
     width: '80px',
-    margin: '10px 0',
+    margin: '10px', // added margin to the
     borderRadius: '6px', // added border-radius
     height: '40px', // set height
-    transition: 'transform 0.2s', // added transition for transform
+    transition: 'transform 0.1s', // added transition for transform
   },
   buttonHover: {
     transform: 'scale(1.05)', // scale up on hover
