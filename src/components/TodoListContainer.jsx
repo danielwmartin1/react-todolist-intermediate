@@ -252,7 +252,7 @@ const styles = {
     flex: '1',
     padding: '20px',
     textAlign: 'center',
-    backgroundImage: 'url("src/components/black1.jpg")', // Add background image
+    backgroundImage: 'url("/black1.jpg")', // Add background image
     backgroundRepeat: 'no-repeat', // Prevent background repeat
     backgroundPosition: 'center', // Center the background image
     display: 'flex',

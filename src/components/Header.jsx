@@ -6,7 +6,7 @@ const Header = () => {
       <h1>
         <a href="/" style={styles.link}>
           <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-            <img src="src/components/react.svg" alt="icon" style={{ width: '100px', marginRight: '1rem' }} />
+            <img src="/react.svg" alt="icon" style={{ width: '100px', marginRight: '1rem' }} />
             Intermediate To-Do List
           </span>
         </a>
