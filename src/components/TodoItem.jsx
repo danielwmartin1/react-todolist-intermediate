@@ -39,7 +39,11 @@ const TodoItem = ({ todo, onEdit, onComplete, onDelete, isEditing, editText, han
           <button onClick={() => {
             console.log('Save button clicked for todo:', todo); // Debugging statement
             saveEditHandler(todo._id);
-          }} style={{ ...styles.button, backgroundColor: 'blue', width: '140px' }}>Save</button> {/* Updated width */}
+          }} style={{ ...styles.button, backgroundColor: 'blue', width: '140px', transition: 'transform 0.1s', cursor: 'pointer' }} 
+          onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} 
+          onMouseLeave={(e) => e.target.style.transform = 'scale(1)'} 
+          onMouseDown={(e) => e.target.style.transform = 'scale(0.95)'} 
+          onMouseUp={(e) => e.target.style.transform = 'scale(1)'}>Save</button> {/* Updated width */}
         </div>
       ) : (
         <>
@@ -63,11 +67,19 @@ const TodoItem = ({ todo, onEdit, onComplete, onDelete, isEditing, editText, han
             <button onClick={() => {
               console.log('Edit button clicked for todo:', todo); // Debugging statement
               onEdit(todo);
-            }} style={{ ...styles.button, backgroundColor: 'orange' }}>Edit</button>
+            }} style={{ ...styles.button, backgroundColor: 'orange', transition: 'transform 0.1s', cursor: 'pointer' }} 
+            onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} 
+            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'} 
+            onMouseDown={(e) => e.target.style.transform = 'scale(0.95)'} 
+            onMouseUp={(e) => e.target.style.transform = 'scale(1)'}>Edit</button>
             <button onClick={() => {
               console.log('Delete button clicked for todo:', todo); // Debugging statement
               onDelete(todo._id);
-            }} style={{ ...styles.button, backgroundColor: 'red' }}>Delete</button>
+            }} style={{ ...styles.button, backgroundColor: 'red', transition: 'transform 0.1s', cursor: 'pointer' }} 
+            onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} 
+            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'} 
+            onMouseDown={(e) => e.target.style.transform = 'scale(0.95)'} 
+            onMouseUp={(e) => e.target.style.transform = 'scale(1)'}>Delete</button>
           </>
         )}
       </div>
@@ -118,12 +130,6 @@ const styles = {
     fontSize: '0.8rem', // Standardize font size
     transition: 'transform 0.1s', // added transition for transform
     cursor: 'pointer', // Add pointer cursor for buttons
-    ':hover': {
-      transform: 'scale(1.05) !important', // Add hover effect
-    },
-    ':active': {
-      transform: 'scale(0.95) !important', // Add active effect
-    },
   },
   editContainer: {
     display: 'flex',
