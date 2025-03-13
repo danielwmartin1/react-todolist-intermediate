@@ -189,9 +189,9 @@ const TodoListContainer = () => {
 
   return (
     <TodoProvider state={state} dispatch={dispatch}>
-      <div style={{ ...styles.container, width: '100vw' }}>
+      <div style={styles.container}>
         <Header />
-        <div style={{ ...styles.content, width: '100vw', height: '100vh' }}>
+        <div style={styles.content}>
           <div style={styles.inputWrapper}>
             <AddTaskForm
               newTodoText={newTodoText}
@@ -245,21 +245,20 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
-    minWidth: '100vw',
-    width: '100vw!important', // Set width to 100vw
-    height: '100vh', // Set height to 100vh
+    width: '100vw', // Set width to 100vw
     alignItems: 'center', // Center the container content
   },
   content: {
     flex: '1',
     padding: '20px',
     textAlign: 'center',
-    backgroundImage: 'url("src/components/black.jpg")', // Add background image
+    backgroundImage: 'url("src/components/black1.jpg")', // Add background image
     backgroundRepeat: 'no-repeat', // Prevent background repeat
     backgroundPosition: 'center', // Center the background image
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center', // Center the content
+    width: '100%', // Ensure content takes full width
   },
   inputWrapper: {
     display: 'flex',
