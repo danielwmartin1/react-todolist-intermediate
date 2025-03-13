@@ -69,6 +69,7 @@ const styles = {
     textAlign: 'left',
   },
   buttons: {
+    flexDirection: 'column',
     display: 'flex',
     gap: '10px',
   },
