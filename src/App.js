@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TodoList from './components/TodoList';
+import Filter from './components/Filter';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
@@ -37,6 +38,7 @@ const App = () => {
 
   return (
     <div>
+      <Filter />
       <TodoList todos={todos} onEdit={editTodo} onComplete={completeTodo} />
     </div>
   );
