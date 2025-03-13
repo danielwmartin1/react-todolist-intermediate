@@ -3,7 +3,7 @@ import React from 'react';
 const Header = () => {
   return (
     <header style={styles.header}>
-      <h1 style={{ margin: '1.5rem' }}>
+      <h1 style={{ margin: '1.2rem' }}>
         <a href="/" style={styles.link}>
           <span style={{ display: 'inline-flex', alignItems: 'center' }}>
             <img src="/react.svg" alt="icon" style={{ width: '100px', marginRight: '1rem' }} />
