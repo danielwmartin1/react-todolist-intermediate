@@ -55,8 +55,9 @@ const TodoItem = ({ todo, onEdit, onComplete, isEditing, editText, handleEditCha
 
 const styles = {
   listItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    display: 'grid',
+    gridTemplateColumns: '3fr 2fr 1fr',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     maxWidth: '600px', // Limit the width of the list items
