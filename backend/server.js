@@ -2,7 +2,7 @@ import express from 'express';
 import process from 'node:process';
 import cors from 'cors'; // Import CORS middleware
 import mongoose from 'mongoose'; // Import mongoose
-import Todo from '../models/Todo.js'; // Import the Todo model
+import Todo from './models/Todo.js'; // Import the Todo model
 
 const app = express();
 const port = typeof process !== 'undefined' && process.env.PORT ? process.env.PORT : 5001;

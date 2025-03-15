@@ -4,12 +4,16 @@ import axios from 'axios';
 
 const App = () => {
     const [todos, setTodos] = useState([]);
+    const [error, setError] = useState(null); // Add error state
 
     useEffect(() => {
         // Fetch todos from the backend
         axios.get('/api/todos')
             .then(response => setTodos(response.data))
-            .catch(error => console.error('Error fetching todos:', error));
+            .catch(error => {
+                console.error('Error fetching todos:', error);
+                setError('Error fetching todos'); // Set error message
+            });
     }, []);
 
     const handleDelete = async (id) => {
@@ -20,6 +24,7 @@ const App = () => {
             console.log(`Todo with id: ${id} deleted successfully`);
         } catch (error) {
             console.error('Error deleting todo:', error);
+            setError('Error deleting todo'); // Set error message
         }
     };
 
@@ -29,8 +34,11 @@ const App = () => {
             setTodos(todos.map(todo => (todo._id === id ? response.data : todo)));
         } catch (error) {
             console.error('Error updating todo:', error);
+            setError('Error updating todo'); // Set error message
         }
     };
+
+    if (error) return <div>{error}</div>; // Display error message
 
     return (
         <div>

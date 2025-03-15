@@ -169,7 +169,7 @@ const TodoListContainer = () => {
 
   const filteredTodos = useMemo(() => {
     console.log('Filtering todos with searchText:', searchText); // Debugging statement
-    return todos.filter(todo => todo.text.toLowerCase().includes(searchText.toLowerCase()));
+    return todos.filter(todo => todo.text && todo.text.toLowerCase().includes(searchText.toLowerCase()));
   }, [todos, searchText]);
 
   const sortedTodos = useMemo(() => {
