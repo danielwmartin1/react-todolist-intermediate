@@ -13,6 +13,10 @@ const TodoItem = ({ todo, onEdit, onComplete, onDelete, isEditing, editText, han
     saveEditHandler(todo._id);
   };
 
+  const formatDate = (date) => {
+    return date ? new Date(date).toLocaleString() : '';
+  };
+
   return (
     <li style={{ ...styles.listItem, opacity: todo.completed ? 0.7 : 1 }}>
       <div style={styles.checkboxContainer}>
@@ -51,11 +55,13 @@ const TodoItem = ({ todo, onEdit, onComplete, onDelete, isEditing, editText, han
           {todo.createdAt && (
             <div style={styles.timestampsContainer}>
               <div style={styles.timestamps}>
-                <span style={{ fontSize: '0.8rem' }}>Created: {new Date(todo.createdAt).toLocaleString()}</span>
+                <span style={{ fontSize: '0.8rem' }}>Created: {formatDate(todo.createdAt)}</span>
                 {todo.updatedAt && todo.updatedAt !== todo.createdAt && (
-                  <span style={{ fontSize: '0.8rem' }}>Updated: {new Date(todo.updatedAt).toLocaleString()}</span>
+                  <span style={{ fontSize: '0.8rem' }}>Updated: {formatDate(todo.updatedAt)}</span>
                 )}
-                <span style={{ fontSize: '0.8rem' }}>{todo.completed ? `Completed: ${new Date(todo.updatedAt).toLocaleString()}` : ''}</span>
+                {todo.completed && todo.completedAt && (
+                  <span style={{ fontSize: '0.8rem' }}>Completed: {formatDate(todo.completedAt)}</span>
+                )}
               </div>
             </div>
           )}

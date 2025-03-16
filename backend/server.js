@@ -2,13 +2,13 @@ import express from 'express';
 import process from 'node:process';
 import cors from 'cors'; // Import CORS middleware
 import mongoose from 'mongoose'; // Import mongoose
-import Todo from '../todo.js'; // Import the Todo model
+import Todo from '../backend/models/todoModel.js'; // Import the Todo model
 
 const app = express();
 const port = typeof process !== 'undefined' && process.env.PORT ? process.env.PORT : 5001;
 
 // MongoDB connection setup
-const mongoURI = process.env.MONGO_URI || 'mongodb+srv://danielwmartin1:Mack2020!!@cluster0.ikgzxfz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/todo-app';
 console.log(`Connecting to MongoDB at: ${mongoURI}`); // Log the MongoDB URI
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
