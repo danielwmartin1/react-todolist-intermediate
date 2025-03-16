@@ -224,7 +224,7 @@ const TodoListContainer = () => {
             todos={sortedTodos}
             startEditing={startEditing} // Ensure startEditing is passed down
             toggleCompletionHandler={toggleCompletionHandler}
-            deleteTodoHandler={deleteTodoHandler}
+            deleteTodoHandler={deleteTodoHandler} // Pass deleteTodoHandler
             editId={editId}
             editText={editText}
             editInputRef={editInputRef}

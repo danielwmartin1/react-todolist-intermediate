@@ -1,7 +1,7 @@
 import React from 'react';
 import TodoItem from './TodoItem.jsx'; // Ensure the correct extension is used
 
-const TodoListItems = ({ todos, startEditing, toggleCompletionHandler, editId, editText, handleEditChange, handleEditKeyDown, saveEditHandler }) => {
+const TodoListItems = ({ todos, startEditing, toggleCompletionHandler, deleteTodoHandler, editId, editText, handleEditChange, handleEditKeyDown, saveEditHandler }) => {
   console.log('TodoListItems rendered with todos:', todos); // Debugging statement
   return (
     <ul style={styles.list}>
@@ -11,6 +11,7 @@ const TodoListItems = ({ todos, startEditing, toggleCompletionHandler, editId, e
           todo={todo}
           onEdit={startEditing}
           onComplete={toggleCompletionHandler}
+          onDelete={deleteTodoHandler} // Pass deleteTodoHandler
           isEditing={editId === todo._id}
           editText={editText}
           handleEditChange={handleEditChange}
