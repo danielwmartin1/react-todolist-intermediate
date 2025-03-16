@@ -22,7 +22,7 @@ export const addTodo = async (newTodoText) => {
 
 export const toggleCompletion = async (id, completed) => {
     try {
-        return await axios.put(`${localHost}/todos/${id}`, { completed: !completed });
+        return await axios.patch(`${localHost}/todos/${id}`, { completed: !completed });
     } catch (error) {
         console.error('Error toggling completion:', error);
         throw error;
