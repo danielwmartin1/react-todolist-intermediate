@@ -4,7 +4,7 @@ import cors from 'cors'; // Import CORS middleware
 import mongoose from 'mongoose'; // Import mongoose
 import dotenv from 'dotenv';
 import todosRoutes from './routes/todos.js'; // Update import for routes
-import Todo from './models/todoModel.js'; // Import the Todo model
+import Todo from '../backend/models/todo.js'; // Import the Todo model
 
 dotenv.config(); // Load environment variables
 
