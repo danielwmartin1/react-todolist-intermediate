@@ -38,7 +38,7 @@ const styles = {
     marginBottom: '20px',
     justifyContent: 'center',
     alignItems: 'center',
-    padding:`10px`
+    padding: '10px'
   },
   input: {
     padding: '0 10px', // increased by 50%
@@ -48,7 +48,7 @@ const styles = {
     backgroundColor: '#fff', // added background color
     color: '#333', // added text color
     height: '40px', // set height
-
+    textAlign: 'center', // centered placeholder text
   },
   button: {
     padding: '10px',
