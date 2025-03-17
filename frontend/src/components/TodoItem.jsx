@@ -130,6 +130,8 @@ const styles = {
     width: '100%', 
     borderRadius: '6px',
     border: '1px solid #ccc',
+    backgroundColor: '#fff',
+    color: '#333',
   },
   button: {
     padding: '10px',
