@@ -1,0 +1,97 @@
+.listItem {
+  display: grid;
+  grid-template-columns: 1fr 3fr 2fr 1fr;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  border-bottom: 2px solid #ccc;
+}
+
+.completed {
+  opacity: 0.7;
+}
+
+.checkboxContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.todoText {
+  font-size: 1rem;
+  text-align: left;
+}
+
+.lineThrough {
+  text-decoration: line-through;
+}
+
+.buttons {
+  flex-direction: column;
+  display: flex;
+  gap: 10px;
+}
+
+.input {
+  margin-left: 150px;
+  margin-right: 20px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.button {
+  padding: 10px;
+  border-radius: 6px;
+  width: 100px;
+  font-size: 0.8rem;
+  transition: transform 0.1s;
+  cursor: pointer;
+}
+
+.saveButton {
+  background-color: blue;
+  width: 140px;
+}
+
+.editButton {
+  background-color: orange;
+}
+
+.deleteButton {
+  background-color: red;
+}
+
+.editContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timestampsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.timestamps {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  gap: 5px;
+}
+
+.timestamp {
+  font-size: 0.8rem;
+}

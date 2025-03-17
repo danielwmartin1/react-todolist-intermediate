@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from 'react';
+import './TodoItem.css';
+import './TodoListMediaQueries.css';
 
 const TodoItem = ({ todo, onEdit, onComplete, onDelete, isEditing, editText, handleEditChange, handleEditKeyDown, saveEditHandler }) => {
   const editInputRef = useRef(null);

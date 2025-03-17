@@ -1,0 +1,13 @@
+.header {
+  text-align: center;
+  padding: 20px;
+  background-color: rgb(0 85 255); /* Keep the background color the same */
+  border-bottom: 3px ridge aqua;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: white;
+
+}

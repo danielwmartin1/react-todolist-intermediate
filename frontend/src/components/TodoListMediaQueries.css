@@ -23,6 +23,10 @@
   .button:active {
     transform: scale(0.95) !important;
   }
+
+  .header {
+    font-size: 1.2rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -52,6 +56,10 @@
 
   .todoText {
     font-size: 0.85rem;
+  }
+
+  .header {
+    font-size: 1rem;
   }
 }
 
@@ -90,6 +98,10 @@
     font-size: 0.7rem;
     border-bottom: 1px solid #ccc; /* Add bottom border */
   }
+
+  .header {
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 320px) {
@@ -126,6 +138,60 @@
     margin-bottom: 8px;
     font-size: 0.6rem;
     border-bottom: 1px solid #ccc;
+  }
+
+  .header {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .inputContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .input {
+    width: 100%;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .listItem {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .timestampsContainer {
+    align-items: center;
+  }
+
+  .timestamps {
+    align-items: center;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .inputWrapper {
+    width: 100%;
+  }
+
+  .filterSortContainer {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .input,
+  .select,
+  .button {
+    width: 100%;
+  }
+
+  .header {
+    font-size: 0.85rem;
   }
 }
 

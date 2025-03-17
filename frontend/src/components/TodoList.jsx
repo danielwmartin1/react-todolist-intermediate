@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import './TodoListMediaQueries.css';
+import './TodoList.css';
 import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService';
 import TodoItem from './TodoItem';
 import { TodoProvider } from '../context/TodoContext';
@@ -222,10 +222,10 @@ const TodoListContainer = () => {
 
   return (
     <TodoProvider state={state} dispatch={dispatch}>
-      <div style={styles.container}>
+      <div className="container">
         <Header />
-        <div style={styles.content}>
-          <div style={styles.inputWrapper}>
+        <div className="content">
+          <div className="inputWrapper">
             <AddTaskForm
               newTodoText={newTodoText}
               addInputRef={addInputRef}
@@ -233,20 +233,20 @@ const TodoListContainer = () => {
               addTodoHandler={addTodoHandler}
               dispatch={dispatch}
             />
-            <div style={styles.filterSortContainer}>
+            <div className="filterSortContainer">
               <input
                 type="text"
                 placeholder="Search by title"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                style={{ ...styles.input, margin: '10px 0', width: '100%' }}
+                className="input"
               />
-              <select value={sortType} onChange={(e) => setSortType(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}>
+              <select value={sortType} onChange={(e) => setSortType(e.target.value)} className="select">
                 <option value="created">Sort by Created</option>
                 <option value="updated">Sort by Updated</option>
                 <option value="completed">Sort by Completed</option>
               </select>
-              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}>
+              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="select">
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>
@@ -269,95 +269,6 @@ const TodoListContainer = () => {
       </div>
     </TodoProvider>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh'
-  },
-  content: {
-    flex: '1',
-    padding: '20px',
-    textAlign: 'center',
-    backgroundImage: 'url("src/components/black.jpg")',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    backgroundSize: 'contain', // Make the React symbol smaller
-  },
-  inputWrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '20px'
-  },
-  inputContainer: {
-    display: 'grid',
-    gridTemplateColumns: '1fr auto',
-    gap: '10px',
-    marginBottom: '20px'
-  },
-  filterSortContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '10px',
-    marginBottom: '20px',
-    borderRadius: '6px'
-  },
-  input: {
-    padding: '10px',
-    width: '100%',
-    backgroundColor: 'white',
-    borderRadius: '6px',
-    color: 'black'
-  },
-  select: {
-    padding: '10px',
-    width: '200px',
-    backgroundColor: 'white',
-    color: 'black',
-    borderRadius: '6px',
-    margin: '10px 0'
-  },
-  button: {
-    padding: '10px',
-    fontSize: '0.8rem', // Standardize font size
-    width: '100px', // Standardize button width
-    borderRadius: '6px',
-    transition: 'transform 0.2s',
-    cursor: 'pointer'
-  },
-  list: {
-    listStyleType: 'none',
-    padding: '0',
-    display: 'grid',
-    gap: '10px'
-  },
-  listItem: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '10px',
-    alignItems: 'center',
-    textAlign: 'left',
-    borderBottom: '2px solid #ccc'
-  },
-  todoText: {
-    cursor: 'pointer',
-    fontSize: '1rem',
-    textAlign: 'left'
-  },
-  buttons: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    padding: '1rem',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'flex-end'
-  }
 };
 
 export default TodoListContainer;

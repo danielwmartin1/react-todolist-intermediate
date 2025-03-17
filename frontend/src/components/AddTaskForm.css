@@ -1,0 +1,39 @@
+.inputContainer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.input {
+  padding: 0 10px;
+  width: 93.5%;
+  margin: 0px;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  height: 35px;
+}
+
+.button {
+  padding: 10px;
+  font-size: 0.7rem;
+  width: 100px;
+  margin: 10px;
+  border-radius: 6px;
+  height: 40px;
+  transition: transform 0.1s;
+  background-color: green; /* Make the button green */
+  color: white; /* Ensure the text is readable */
+}
+
+.buttonHover {
+  transform: scale(1.05);
+}
+
+.buttonActive {
+  transform: scale(0.95);
+}

@@ -1,8 +1,10 @@
 import React from 'react';
+import './Header.css';
+import './TodoListMediaQueries.css';
 
 const Header = () => {
   return (
-    <header style={styles.header}>
+    <header className="header">
       <h1 style={{ margin: '1.2rem' }}>
         <a href="/" style={styles.link}>
           <span style={{ display: 'inline-flex', alignItems: 'center' }}>
@@ -16,14 +18,6 @@ const Header = () => {
 };
 
 const styles = {
-  header: {
-    backgroundColor: 'rgb(0 85 255)',
-    color: 'white',
-    textAlign: 'center',
-    width: '100vw',
-    borderBottom: '3px ridge aqua',
-    zIndex: '1000',
-  },
   link: {
     color: 'inherit',
     textDecoration: 'none'
