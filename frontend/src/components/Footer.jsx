@@ -15,7 +15,6 @@ const styles = {
     textAlign: 'center',
     width: '100%',
     borderTop: '3px ridge aqua',
-    zIndex: 1000,
     position: 'relative', // Ensure footer sticks to the bottom
     bottom: '0', // Align to the bottom
   }

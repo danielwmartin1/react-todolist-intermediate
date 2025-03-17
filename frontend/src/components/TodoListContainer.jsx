@@ -48,7 +48,7 @@ const TodoListContainer = () => {
   const { todos, newTodoText, editId, editText } = state;
   const [searchText, setSearchText] = useState('');
   const [sortType, setSortType] = useState('created');
-  const [sortOrder, setSortOrder] = useState('asc'); // Add state for sort order
+  const [sortOrder, setSortOrder] = useState('desc'); // Add state for sort order
   const addInputRef = useRef(null);
   const editInputRef = useRef(null);
 
