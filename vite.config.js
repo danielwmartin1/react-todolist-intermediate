@@ -8,7 +8,7 @@ export default defineConfig({
     port: 5173,
   },
   build: {
-    outDir: 'frontend/dist',
+    outDir: 'dist',
     rollupOptions: {
       input: 'frontend/index.html', // Ensure the entry point is set to frontend/index.html
     },

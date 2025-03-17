@@ -24,7 +24,7 @@ const TodoItem = ({ todo, onEdit, onComplete, onDelete, isEditing, editText, han
           <input
             type="checkbox"
             checked={todo.completed}
-            onChange={() => onComplete(todo._id, todo.completed)}
+            onChange={() => onComplete(todo._id, !todo.completed)} // Pass the new completed state
             style={styles.checkbox}
           />
         )}
