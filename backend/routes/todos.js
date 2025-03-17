@@ -36,6 +36,7 @@ router.patch('/:id', async (req, res) => {
             return res.status(404).json({ message: 'Todo not found' });
         }
         todo.completed = req.body.completed;
+        todo.completedAt = req.body.completed ? new Date() : null;
         const updatedTodo = await todo.save();
         res.json(updatedTodo);
     } catch (error) {
@@ -66,6 +67,7 @@ router.put('/:id', async (req, res) => {
         }
         todo.text = req.body.text;
         todo.completed = req.body.completed;
+        todo.completedAt = req.body.completed ? new Date() : null;
         const updatedTodo = await todo.save();
         res.json(updatedTodo);
     } catch (error) {

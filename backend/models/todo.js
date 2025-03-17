@@ -8,6 +8,10 @@ const todoSchema = new mongoose.Schema({
     completed: {
         type: Boolean,
         default: false
+    },
+    completedAt: {
+        type: Date,
+        default: null
     }
 }, { timestamps: true }); // Enable timestamps
 
