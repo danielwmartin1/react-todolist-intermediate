@@ -2,9 +2,9 @@ import React, { useEffect, useReducer, useRef, useState, useMemo } from 'react';
 import Header from './Header.jsx';
 import Footer from './Footer.jsx';
 import './TodoListMediaQueries.css';
-import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService';
+import { fetchTodos, addTodo, toggleCompletion, deleteTodo, saveEdit } from '../services/todoService.js';
 import TodoListItems from './TodoListItems.jsx';
-import { TodoProvider } from '../context/TodoContext';
+import { TodoProvider } from '../context/TodoContext.jsx';
 import AddTaskForm from './AddTaskForm.jsx';
 
 const initialState = {
