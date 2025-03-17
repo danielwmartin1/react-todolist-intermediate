@@ -1,1 +1,5 @@
 .vercel
+.env
+.dotenv
+.env.local
+.env.development.local
