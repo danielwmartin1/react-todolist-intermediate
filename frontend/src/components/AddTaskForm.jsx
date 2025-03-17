@@ -48,15 +48,15 @@ const styles = {
     backgroundColor: '#fff', // added background color
     color: '#333', // added text color
     height: '40px', // set height
-    textAlign: 'center', // centered placeholder text
   },
   button: {
     padding: '10px',
+    padding: '10px',
     fontSize: '0.7rem',
-    width: '100px',
-    margin: '10px', // added margin to the
+    width: '100px', // added margin to the
+    margin: '10px', // added margin to theadius
     borderRadius: '6px', // added border-radius
-    height: '40px', // set height
+    height: '40px', // set height // added transition for transform
     transition: 'transform 0.1s', // added transition for transform
   },
   buttonHover: {
@@ -66,5 +66,4 @@ const styles = {
     transform: 'scale(0.95)', // scale down on active
   }
 };
-
 export default AddTaskForm;
