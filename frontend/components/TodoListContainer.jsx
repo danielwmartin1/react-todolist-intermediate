@@ -37,6 +37,8 @@ const TodoListContainer = () => {
         return filteredTodos.sort((a, b) => {
             if (sortType === 'created') {
                 return sortOrder === 'asc' ? new Date(a.created) - new Date(b.created) : new Date(b.created) - new Date(a.created);
+            } else if (sortType === 'updated') {
+                return sortOrder === 'asc' ? new Date(a.updatedAt) - new Date(b.updatedAt) : new Date(b.updatedAt) - new Date(a.updatedAt);
             }
             // Add other sort types if needed
             return 0;

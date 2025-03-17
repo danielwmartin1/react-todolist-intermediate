@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "concurrently \"npm run backend\" \"npm run dev\"",
+    "backend": "nodemon backend/server.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
