@@ -5,6 +5,19 @@ import './TodoListMediaQueries.css';
 const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandler, dispatch }) => {
   const [buttonStyle, setButtonStyle] = useState(styles.button);
 
+  const handleBlur = () => {
+    dispatch({ type: 'RESET_NEW_TODO_TEXT' });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      e.target.blur();
+      return;
+    } else {
+      handleAddKeyDown(e);
+    }
+  };
+
   return (
     <div style={styles.inputContainer}>
       <input
@@ -15,7 +28,8 @@ const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandle
           dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value });
         }}
         placeholder="Add a new task"
-        onKeyDown={handleAddKeyDown}
+        onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
         style={styles.input}
       />
       <button
@@ -52,7 +66,6 @@ const styles = {
     height: '40px', // set height
   },
   button: {
-    padding: '10px',
     padding: '10px',
     fontSize: '0.7rem',
     width: '100px', // added margin to the

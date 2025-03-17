@@ -3,14 +3,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  root: 'frontend', // Set the root to the frontend directory
-  server: {
-    port: 5173,
-  },
+  root: './frontend', // Ensure this points to the directory containing index.html
   build: {
-    outDir: 'frontend/dist',
-    rollupOptions: {
-      input: 'frontend/index.html', // Ensure the entry point is set to frontend/index.html
-    },
+    outDir: '../dist', // Adjusted to ensure the output directory is correct
   },
 });

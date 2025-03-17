@@ -2,6 +2,15 @@ import React from 'react';
 import TodoItem from './TodoItem.jsx'; // Ensure the correct extension is used
 
 const TodoListItems = ({ todos, startEditing, toggleCompletionHandler, deleteTodoHandler, editId, editText, handleEditChange, handleEditKeyDown, saveEditHandler }) => {
+  const handleKeyDown = (e, todo) => {
+    if (e.key === 'Escape') {
+      e.target.blur();
+      return;
+    } else {
+      handleEditKeyDown(e, todo);
+    }
+  };
+
   console.log('TodoListItems rendered with todos:', todos); // Debugging statement
   return (
     <ul style={styles.list}>
@@ -15,7 +24,7 @@ const TodoListItems = ({ todos, startEditing, toggleCompletionHandler, deleteTod
           isEditing={editId === todo._id}
           editText={editText}
           handleEditChange={handleEditChange}
-          handleEditKeyDown={handleEditKeyDown}
+          handleEditKeyDown={(e) => handleKeyDown(e, todo)}
           saveEditHandler={saveEditHandler} // Pass saveEditHandler
         />
       ))}
