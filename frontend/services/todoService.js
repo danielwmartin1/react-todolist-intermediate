@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const localHost = 'http://localhost:5001/api'; // Update the base URL to include /api
+const localHost = 'http://localhost:5001/api'; // Ensure the base URL is correct
 
 export const fetchTodos = async () => {
     try {
@@ -22,7 +22,7 @@ export const addTodo = async (newTodoText) => {
 
 export const toggleCompletion = async (id, completed) => {
     try {
-        return await axios.patch(`${localHost}/todos/${id}`, { completed: !completed });
+        return await axios.patch(`${localHost}/todos/${id}`, { completed });
     } catch (error) {
         console.error('Error toggling completion:', error);
         throw error;
