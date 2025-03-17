@@ -68,8 +68,8 @@ const styles = {
   button: {
     padding: '10px',
     fontSize: '0.7rem',
-    width: '100px', // added margin to the
-    margin: '10px', // added margin to theadius
+    width: '100px', // added margin
+    margin: '10px', // added margin
     borderRadius: '6px', // added border-radius
     height: '40px', // set height // added transition for transform
     transition: 'transform 0.1s', // added transition for transform
