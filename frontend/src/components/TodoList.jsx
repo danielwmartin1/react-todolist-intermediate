@@ -7,6 +7,7 @@ import TodoItem from './TodoItem';
 import { TodoProvider } from '../context/TodoContext';
 import AddTaskForm from './AddTaskForm';
 import TodoListItems from './TodoListItems.jsx';
+import FilterSortContainer from './FilterSortContainer';
 
 const initialState = {
   todos: [],
@@ -233,24 +234,17 @@ const TodoListContainer = () => {
               addTodoHandler={addTodoHandler}
               dispatch={dispatch}
             />
-            <div className="filterSortContainer">
-              <input
-                type="text"
-                placeholder="Search by title"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="input"
-              />
-              <select value={sortType} onChange={(e) => setSortType(e.target.value)} className="select">
-                <option value="created">Sort by Created</option>
-                <option value="updated">Sort by Updated</option>
-                <option value="completed">Sort by Completed</option>
-              </select>
-              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="select">
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-            </div>
+
+          </div>
+          <div>
+            <FilterSortContainer
+              searchText={searchText}
+              setSearchText={setSearchText}
+              sortType={sortType}
+              setSortType={setSortType}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+            />
           </div>
           <TodoListItems
             sortedTodos={sortedTodos}
