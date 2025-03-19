@@ -7,7 +7,6 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
-    "vercel": "^41.4.1",
-    "vite": "^6.2.2"
+    "vercel": "^41.4.1"
   }
 }
