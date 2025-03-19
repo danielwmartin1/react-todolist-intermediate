@@ -48,38 +48,30 @@ const TodoListContainer = () => {
   const { todos, newTodoText, editId, editText } = state;
   const [searchText, setSearchText] = useState('');
   const [sortType, setSortType] = useState('created');
-  const [sortOrder, setSortOrder] = useState('desc'); // Add state for sort order
-  const [isDatabaseConnecting, setIsDatabaseConnecting] = useState(true); // Add state for database connection
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [isLoading, setIsLoading] = useState(true); // Replace isDatabaseConnecting with isLoading
   const addInputRef = useRef(null);
   const editInputRef = useRef(null);
 
   useEffect(() => {
-    const simulateDatabaseConnection = setTimeout(() => {
-      setIsDatabaseConnecting(false);
-    }, 2000); // Simulate a delay for database connection
-
-    return () => clearTimeout(simulateDatabaseConnection);
-  }, []);
-
-  useEffect(() => {
-    if (!isDatabaseConnecting) {
-      const fetchTodosData = async () => {
-        try {
-          console.log('Fetching todos...'); // Debugging statement
-          const response = await fetchTodos();
-          dispatch({ type: 'SET_TODOS', payload: response.data });
-          console.log('Fetched todos:', response.data); // Debugging statement
-          if (addInputRef.current) {
-            addInputRef.current.focus();
-          }
-        } catch (error) {
-          console.error('Error fetching todos:', error);
+    const fetchTodosData = async () => {
+      try {
+        console.log('Fetching todos...');
+        const response = await fetchTodos();
+        dispatch({ type: 'SET_TODOS', payload: response.data });
+        console.log('Fetched todos:', response.data);
+        setIsLoading(false); // Set loading to false once data is fetched
+        if (addInputRef.current) {
+          addInputRef.current.focus();
         }
-      };
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+        setIsLoading(false); // Ensure loading is false even if there's an error
+      }
+    };
 
-      fetchTodosData();
-    }
-  }, [isDatabaseConnecting]); // Ensure this useEffect runs only once on mount
+    fetchTodosData();
+  }, []); // Ensure this useEffect runs only once on mount
 
   useEffect(() => {
     if (editId && editInputRef.current) {
@@ -195,63 +187,65 @@ const TodoListContainer = () => {
       <div style={styles.container}>
         <Header />
         <div style={styles.content}>
-          <div style={styles.inputWrapper}>
-            <AddTaskForm
-              newTodoText={newTodoText}
-              addInputRef={addInputRef}
-              handleAddKeyDown={handleAddKeyDown}
-              addTodoHandler={addTodoHandler}
-              dispatch={dispatch}
-            />
-            <div style={styles.filterSortContainer}>
-              <input
-                type="text"
-                placeholder="Search by title"
-                value={searchText}
-                onChange={(e) => {
-                  console.log('Search text updated:', e.target.value);
-                  setSearchText(e.target.value);
-                }}
-                style={{ ...styles.input, margin: '10px 0', width: '100%' }}
-              />
-              <select value={sortType} onChange={(e) => {
-                  console.log('Sort type updated:', e.target.value);
-                  setSortType(e.target.value);
-                }} style={{ ...styles.select, margin: '10px 0' }}>
-                <option value="created">Sort by Created</option>
-                <option value="updated">Sort by Updated</option>
-                <option value="completed">Sort by Completed</option>
-              </select>
-              <select value={sortOrder} onChange={(e) => {
-                  console.log('Sort order updated:', e.target.value);
-                  setSortOrder(e.target.value);
-                }} style={{ ...styles.select, margin: '10px 0' }}>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-            </div>
-          </div>
-          {isDatabaseConnecting ? (
+          {isLoading ? (
             <div style={styles.databaseConnecting}>
               <p>Database connecting...</p>
             </div>
           ) : (
-            <TodoListItems
-              style={styles.list}
-              todos={sortedTodos}
-              startEditing={startEditing}
-              toggleCompletionHandler={toggleCompletionHandler}
-              deleteTodoHandler={deleteTodoHandler}
-              editId={editId}
-              editText={editText}
-              editInputRef={editInputRef}
-              handleEditChange={(e) => {
-                dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value });
-              }}
-              handleEditKeyDown={handleEditKeyDown}
-              saveEditHandler={saveEditHandler}
-              dispatch={dispatch}
-            />
+            <>
+              <div style={styles.inputWrapper}>
+                <AddTaskForm
+                  newTodoText={newTodoText}
+                  addInputRef={addInputRef}
+                  handleAddKeyDown={handleAddKeyDown}
+                  addTodoHandler={addTodoHandler}
+                  dispatch={dispatch}
+                />
+                <div style={styles.filterSortContainer}>
+                  <input
+                    type="text"
+                    placeholder="Search by title"
+                    value={searchText}
+                    onChange={(e) => {
+                      console.log('Search text updated:', e.target.value);
+                      setSearchText(e.target.value);
+                    }}
+                    style={{ ...styles.input, margin: '10px 0', width: '100%' }}
+                  />
+                  <select value={sortType} onChange={(e) => {
+                      console.log('Sort type updated:', e.target.value);
+                      setSortType(e.target.value);
+                    }} style={{ ...styles.select, margin: '10px 0' }}>
+                    <option value="created">Sort by Created</option>
+                    <option value="updated">Sort by Updated</option>
+                    <option value="completed">Sort by Completed</option>
+                  </select>
+                  <select value={sortOrder} onChange={(e) => {
+                      console.log('Sort order updated:', e.target.value);
+                      setSortOrder(e.target.value);
+                    }} style={{ ...styles.select, margin: '10px 0' }}>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                  </select>
+                </div>
+              </div>
+              <TodoListItems
+                style={styles.list}
+                todos={sortedTodos}
+                startEditing={startEditing}
+                toggleCompletionHandler={toggleCompletionHandler}
+                deleteTodoHandler={deleteTodoHandler}
+                editId={editId}
+                editText={editText}
+                editInputRef={editInputRef}
+                handleEditChange={(e) => {
+                  dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value });
+                }}
+                handleEditKeyDown={handleEditKeyDown}
+                saveEditHandler={saveEditHandler}
+                dispatch={dispatch}
+              />
+            </>
           )}
         </div>
         <Footer />
@@ -339,7 +333,6 @@ const styles = {
   },
   todoText: {
     cursor: 'pointer',
-    fontSize: '1rem',
     textAlign: 'left'
   },
   buttons: {
