@@ -22,7 +22,11 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Middleware setup
-app.use(cors()); // Enable CORS
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://dwm-intermediate-react-todolist-api.vercel.app/api/todos'], // Allow specific origins
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'], // Allow specific HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+})); // Enable CORS with configuration
 app.use(express.json()); // Parse JSON bodies
 
 // Routes
