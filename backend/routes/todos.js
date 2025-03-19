@@ -47,14 +47,29 @@ router.patch('/:id', async (req, res) => {
 // Delete a todo
 router.delete('/:id', async (req, res) => {
   try {
-    const todo = await Todo.findById(req.params.id);
+    const { id } = req.params;
+    if (!id) {
+      console.error('ID parameter is missing'); // Log missing ID
+      return res.status(400).json({ message: 'ID parameter is required' });
+    }
+    console.log('DELETE request received for ID:', id); // Log the ID being processed
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) { // Validate MongoDB ObjectId format
+      console.error('Invalid ID format:', id); // Log invalid ID format
+      return res.status(400).json({ message: 'Invalid ID format' });
+    }
+
+    const todo = await Todo.findByIdAndDelete(id); // Use findByIdAndDelete to delete the todo
     if (!todo) {
+      console.error('Todo not found for ID:', id); // Log if the todo is not found
       return res.status(404).json({ message: 'Todo not found' });
     }
-    await todo.remove();
+
+    console.log('Todo successfully deleted for ID:', id); // Log successful deletion
     res.json({ message: 'Todo deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error deleting todo for ID:', id, error); // Log the error with the ID
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
 

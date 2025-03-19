@@ -74,7 +74,11 @@ app.delete('/todos/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    await Todo.findByIdAndDelete(id);
+    const todo = await Todo.findById(id);
+    if (!todo) {
+      return res.status(404).send({ error: 'Todo not found' });
+    }
+    await todo.remove();
     res.status(204).send();
   } catch (error) {
     res.status(500).send(error);

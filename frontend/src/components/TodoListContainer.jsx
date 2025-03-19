@@ -110,11 +110,12 @@ const TodoListContainer = () => {
   const deleteTodoHandler = async (id) => {
     console.log('deleteTodoHandler called with id:', id); // Debugging statement
     try {
-      await deleteTodo(id);
+      const response = await deleteTodo(id); // Ensure this function sends the correct ID
       dispatch({ type: 'DELETE_TODO', payload: id });
       console.log('Deleted todo:', id); // Debugging statement
     } catch (error) {
-      console.error('Error deleting todo:', error);
+      console.error('Error deleting todo:', error.response?.data?.message || error.message); // Log the error message
+      alert(`Failed to delete todo: ${error.response?.data?.message || 'Internal server error'}`); // Show error to the user
     }
   };
 

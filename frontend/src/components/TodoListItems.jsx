@@ -20,12 +20,12 @@ const TodoListItems = ({ todos, startEditing, toggleCompletionHandler, deleteTod
           todo={todo}
           onEdit={startEditing}
           onComplete={toggleCompletionHandler}
-          onDelete={deleteTodoHandler} // Pass deleteTodoHandler
+          onDelete={() => deleteTodoHandler(todo._id)} // Ensure the correct ID is passed
           isEditing={editId === todo._id}
           editText={editText}
           handleEditChange={handleEditChange}
           handleEditKeyDown={(e) => handleKeyDown(e, todo)}
-          saveEditHandler={saveEditHandler} // Pass saveEditHandler
+          saveEditHandler={saveEditHandler}
         />
       ))}
     </ul>
