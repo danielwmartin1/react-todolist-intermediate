@@ -23,10 +23,10 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Middleware setup
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://dwm-intermediate-react-todolist-api.vercel.app/api/todos'], // Allow specific origins
+  origin: '*', // Allow all origins for development purposes
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'], // Allow specific HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
-})); // Enable CORS with configuration
+})); // Enable CORS with open configuration for development
 app.use(express.json()); // Parse JSON bodies
 
 // Routes
