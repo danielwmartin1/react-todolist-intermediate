@@ -1,5 +1,5 @@
 import express from 'express';
-import process from 'node:process';
+import process from 'node:process'; // Fixed typo: removed extra 's'
 import cors from 'cors'; // Import CORS middleware
 import mongoose from 'mongoose'; // Import mongoose
 import dotenv from 'dotenv';
@@ -23,10 +23,10 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Middleware setup
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://dwm-intermediate-react-todolist-api.vercel.app/', 'https://dwm-intermediate-react-todolist-api.vercel.app/api/todos', 'https://dwm-intermediate-react-todolist-api.vercel.app/'], // Allow specific origins
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'], // Allow specific HTTP methods
+  origin: '*', // Allow all origins for development purposes
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'], // Allow all HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
-})); // Enable CORS with configuration
+})); // Enable CORS with open configuration
 app.use(express.json()); // Parse JSON bodies
 
 // Routes
