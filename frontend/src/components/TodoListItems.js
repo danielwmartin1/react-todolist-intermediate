@@ -27,6 +27,7 @@ const TodoListItems = ({
               style={styles.input}
             />
           ) : (
+            // If not editing, display the todo text. Clicking on it starts editing.
             <span onClick={() => startEditing(todo)} style={{ ...styles.todoText, textDecoration: todo.completed ? 'line-through' : 'none' }}>
               {todo.text}
             </span>
@@ -34,8 +35,10 @@ const TodoListItems = ({
           <TodoItem todo={todo} onEdit={startEditing} onComplete={toggleCompletionHandler} />
           <div className="buttons" style={styles.buttons}>
             {editId === todo._id ? (
+              // Show "Save" button if the current todo is being edited
               <button onClick={() => saveEditHandler(todo._id)} style={{ ...styles.button, backgroundColor: 'blue' }}>Save</button>
             ) : (
+              // Show "Complete/Incomplete" button based on the todo's completion status
               <button onClick={() => toggleCompletionHandler(todo._id, todo.completed)} style={{ ...styles.button, backgroundColor: 'purple' }}>
                 {todo.completed ? 'Incomplete' : 'Complete'}
               </button>

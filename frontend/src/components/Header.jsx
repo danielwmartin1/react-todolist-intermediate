@@ -20,7 +20,7 @@ const Header = () => {
 const styles = {
   link: {
     color: 'inherit',
-    textDecoration: 'none'
+    textDecoration: 'none' // Ensure the link inherits the default text color
   }
 };
 

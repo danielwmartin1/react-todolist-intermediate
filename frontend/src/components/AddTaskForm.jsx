@@ -6,15 +6,16 @@ const AddTaskForm = ({ newTodoText, addInputRef, handleAddKeyDown, addTodoHandle
   const [buttonStyle, setButtonStyle] = useState(styles.button);
 
   const handleBlur = () => {
+    // Reset the input field when it loses focus
     dispatch({ type: 'RESET_NEW_TODO_TEXT' });
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
-      e.target.blur();
+      e.target.blur(); // Blur the input field on Escape key
       return;
     } else {
-      handleAddKeyDown(e);
+      handleAddKeyDown(e); // Handle other key presses
     }
   };
 
@@ -57,28 +58,28 @@ const styles = {
     padding: '10px'
   },
   input: {
-    padding: '0 10px', // increased by 50%
+    padding: '0 10px',
     width: '87.5%',
     margin: '0px',
-    borderRadius: '6px', // added border-radius
-    backgroundColor: '#fff', // added background color
-    color: '#333', // added text color
-    height: '40px', // set height
+    borderRadius: '6px',
+    backgroundColor: '#fff',
+    color: '#333',
+    height: '40px',
   },
   button: {
     padding: '10px',
     fontSize: '0.7rem',
-    width: '100px', // added margin
-    margin: '10px', // added margin
-    borderRadius: '6px', // added border-radius
-    height: '40px', // set height // added transition for transform
-    transition: 'transform 0.1s', // added transition for transform
+    width: '100px',
+    margin: '10px',
+    borderRadius: '6px',
+    height: '40px',
+    transition: 'transform 0.1s',
   },
   buttonHover: {
-    transform: 'scale(1.05)', // scale up on hover
+    transform: 'scale(1.05)',
   },
   buttonActive: {
-    transform: 'scale(0.95)', // scale down on active
+    transform: 'scale(0.95)',
   }
 };
 export default AddTaskForm;
