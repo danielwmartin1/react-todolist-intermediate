@@ -14,11 +14,23 @@ const initialState = {
   editText: '',
   createdAt: new Date(),
   updatedAt: new Date(),
-  completedAt: null
+  completedAt: null,
+  searchText: '',
+  sortType: 'created',
+  sortOrder: 'desc',
+  isLoading: true,
 };
 
-const reducer = (state, action) => {
+function reducer(state, action) {
   switch (action.type) {
+    case 'SET_SEARCH_TEXT':
+      return { ...state, searchText: action.payload };
+    case 'SET_SORT_TYPE':
+      return { ...state, sortType: action.payload };
+    case 'SET_SORT_ORDER':
+      return { ...state, sortOrder: action.payload };
+    case 'SET_LOADING':
+      return { ...state, isLoading: action.payload };
     case 'SET_TODOS':
       return { ...state, todos: action.payload };
     case 'SET_NEW_TODO_TEXT':
@@ -39,9 +51,9 @@ const reducer = (state, action) => {
     case 'DELETE_TODO':
       return { ...state, todos: state.todos.filter(todo => todo._id !== action.payload) };
     default:
-      return state;
+      throw new Error(`Unknown action type: ${action.type}`);
   }
-};
+}
 
 const TodoListContainer = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -181,6 +193,14 @@ const TodoListContainer = () => {
       return sortOrder === 'asc' ? comparison : -comparison;
     });
   }, [filteredTodos, sortType, sortOrder]);
+
+  const handleSearchTextChange = (text) => {
+    dispatch({ type: 'SET_SEARCH_TEXT', payload: text });
+  };
+
+  const toggleLoading = () => {
+    dispatch({ type: 'SET_LOADING', payload: !state.isLoading });
+  };
 
   return (
     <TodoProvider state={state} dispatch={dispatch}>
