@@ -49,44 +49,55 @@ const TodoListContainer = () => {
   const [searchText, setSearchText] = useState('');
   const [sortType, setSortType] = useState('created');
   const [sortOrder, setSortOrder] = useState('desc'); // Add state for sort order
+  const [isDatabaseConnecting, setIsDatabaseConnecting] = useState(true); // Add state for database connection
   const addInputRef = useRef(null);
   const editInputRef = useRef(null);
 
   useEffect(() => {
-    const fetchTodosData = async () => {
-      try {
-        console.log('Fetching todos...'); // Debugging statement
-        const response = await fetchTodos();
-        dispatch({ type: 'SET_TODOS', payload: response.data });
-        console.log('Fetched todos:', response.data); // Debugging statement
-        if (addInputRef.current) {
-          addInputRef.current.focus();
-        }
-      } catch (error) {
-        console.error('Error fetching todos:', error);
-      }
-    };
+    const simulateDatabaseConnection = setTimeout(() => {
+      setIsDatabaseConnecting(false);
+    }, 2000); // Simulate a delay for database connection
 
-    fetchTodosData();
-  }, []); // Ensure this useEffect runs only once on mount
+    return () => clearTimeout(simulateDatabaseConnection);
+  }, []);
+
+  useEffect(() => {
+    if (!isDatabaseConnecting) {
+      const fetchTodosData = async () => {
+        try {
+          console.log('Fetching todos...'); // Debugging statement
+          const response = await fetchTodos();
+          dispatch({ type: 'SET_TODOS', payload: response.data });
+          console.log('Fetched todos:', response.data); // Debugging statement
+          if (addInputRef.current) {
+            addInputRef.current.focus();
+          }
+        } catch (error) {
+          console.error('Error fetching todos:', error);
+        }
+      };
+
+      fetchTodosData();
+    }
+  }, [isDatabaseConnecting]); // Ensure this useEffect runs only once on mount
 
   useEffect(() => {
     if (editId && editInputRef.current) {
+      console.log('Focusing on edit input for todo ID:', editId);
       editInputRef.current.focus();
     }
   }, [editId]);
 
   const addTodoHandler = async () => {
-    console.log('addTodoHandler called'); // Debugging statement
     if (newTodoText.trim()) {
       try {
-        console.log('Adding new todo:', newTodoText); // Debugging statement
+        console.log('Adding new todo:', newTodoText);
         const response = await addTodo(newTodoText);
         const newTodo = response.data;
-        const updatedTodos = [newTodo, ...todos]; // Add new todo to the top of the list
+        const updatedTodos = [newTodo, ...todos];
         dispatch({ type: 'SET_TODOS', payload: updatedTodos });
         dispatch({ type: 'SET_NEW_TODO_TEXT', payload: '' });
-        console.log('Added new todo:', newTodo); // Debugging statement
+        console.log('Added new todo:', newTodo);
         if (addInputRef.current) {
           addInputRef.current.focus();
         }
@@ -97,53 +108,46 @@ const TodoListContainer = () => {
   };
 
   const toggleCompletionHandler = async (id, completed) => {
-    console.log('toggleCompletionHandler called with id:', id, 'completed:', completed); // Debugging statement
     try {
+      console.log('Toggling completion for todo ID:', id, 'to:', completed);
       const response = await toggleCompletion(id, completed);
       dispatch({ type: 'UPDATE_TODO', payload: response.data });
-      console.log('Toggled completion for todo:', response.data); // Debugging statement
+      console.log('Toggled completion for todo:', response.data);
     } catch (error) {
       console.error('Error toggling completion:', error);
     }
   };
 
   const deleteTodoHandler = async (id) => {
-    console.log('deleteTodoHandler called with id:', id); // Debugging statement
     try {
-      const response = await deleteTodo(id); // Ensure this function sends the correct ID
+      console.log('Deleting todo ID:', id);
+      await deleteTodo(id);
       dispatch({ type: 'DELETE_TODO', payload: id });
-      console.log('Deleted todo:', id); // Debugging statement
+      console.log('Deleted todo ID:', id);
     } catch (error) {
-      console.error('Error deleting todo:', error.response?.data?.message || error.message); // Log the error message
-      alert(`Failed to delete todo: ${error.response?.data?.message || 'Internal server error'}`); // Show error to the user
+      console.error('Error deleting todo:', error);
     }
   };
 
   const startEditing = (todo) => {
-    console.log('startEditing called with todo:', todo); // Debugging statement
+    console.log('Starting edit for todo:', todo);
     dispatch({ type: 'SET_EDIT_TODO', payload: { id: todo._id, text: todo.text } });
-    dispatch({ type: 'SET_EDIT_TEXT', payload: todo.text }); // Ensure editText is set
-  };
-
-  const handleEditChange = (e) => {
-    console.log('handleEditChange called with value:', e.target.value); // Debugging statement
-    dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value });
+    dispatch({ type: 'SET_EDIT_TEXT', payload: todo.text });
   };
 
   const saveEditHandler = async (id) => {
-    console.log('saveEditHandler called with id:', id); // Debugging statement
-    if (editText.trim() && editText.trim() !== newTodoText.trim()) { // Ensure editText is different from newTodoText
+    if (editText.trim() && editText.trim() !== newTodoText.trim()) {
       try {
         const todo = todos.find(todo => todo._id === id);
-        if (editText.trim() === todo.text.trim()) { // Exit editing if editText is the same as the original text
+        if (editText.trim() === todo.text.trim()) {
           dispatch({ type: 'SET_EDIT_TODO', payload: { id: null, text: '' } });
           return;
         }
         const updatedTodo = { text: editText, completed: todo.completed };
-        console.log('Saving edit for todo:', id, updatedTodo); // Debugging statement
+        console.log('Saving edit for todo:', id, updatedTodo);
         const response = await saveEdit(id, editText, todo.completed);
         dispatch({ type: 'UPDATE_TODO', payload: response.data });
-        console.log('Saved edit for todo:', response.data); // Debugging statement
+        console.log('Saved edit for todo:', response.data);
       } catch (error) {
         console.error('Error saving edit:', error);
       }
@@ -151,17 +155,15 @@ const TodoListContainer = () => {
   };
 
   const handleAddKeyDown = async (e) => {
-    console.log('handleAddKeyDown called with key:', e.key); // Debugging statement
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
       await addTodoHandler();
     } 
   };
 
   const handleEditKeyDown = async (e, id) => {
-    console.log('handleEditKeyDown called with key:', e.key, 'id:', id); // Debugging statement
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
       await saveEditHandler(id);
     } else if (e.key === 'Escape') {
       dispatch({ type: 'SET_EDIT_TODO', payload: { id: null, text: '' } });
@@ -206,34 +208,51 @@ const TodoListContainer = () => {
                 type="text"
                 placeholder="Search by title"
                 value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={(e) => {
+                  console.log('Search text updated:', e.target.value);
+                  setSearchText(e.target.value);
+                }}
                 style={{ ...styles.input, margin: '10px 0', width: '100%' }}
               />
-              <select value={sortType} onChange={(e) => setSortType(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}>
+              <select value={sortType} onChange={(e) => {
+                  console.log('Sort type updated:', e.target.value);
+                  setSortType(e.target.value);
+                }} style={{ ...styles.select, margin: '10px 0' }}>
                 <option value="created">Sort by Created</option>
                 <option value="updated">Sort by Updated</option>
                 <option value="completed">Sort by Completed</option>
               </select>
-              <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} style={{ ...styles.select, margin: '10px 0' }}>
+              <select value={sortOrder} onChange={(e) => {
+                  console.log('Sort order updated:', e.target.value);
+                  setSortOrder(e.target.value);
+                }} style={{ ...styles.select, margin: '10px 0' }}>
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>
             </div>
           </div>
-          <TodoListItems
-            style={styles.list}
-            todos={sortedTodos}
-            startEditing={startEditing} // Ensure startEditing is passed down
-            toggleCompletionHandler={toggleCompletionHandler}
-            deleteTodoHandler={deleteTodoHandler} // Pass deleteTodoHandler
-            editId={editId}
-            editText={editText}
-            editInputRef={editInputRef}
-            handleEditChange={handleEditChange}
-            handleEditKeyDown={handleEditKeyDown}
-            saveEditHandler={saveEditHandler} // Pass saveEditHandler
-            dispatch={dispatch}
-          />
+          {isDatabaseConnecting ? (
+            <div style={styles.databaseConnecting}>
+              <p>Database connecting...</p>
+            </div>
+          ) : (
+            <TodoListItems
+              style={styles.list}
+              todos={sortedTodos}
+              startEditing={startEditing}
+              toggleCompletionHandler={toggleCompletionHandler}
+              deleteTodoHandler={deleteTodoHandler}
+              editId={editId}
+              editText={editText}
+              editInputRef={editInputRef}
+              handleEditChange={(e) => {
+                dispatch({ type: 'SET_EDIT_TEXT', payload: e.target.value });
+              }}
+              handleEditKeyDown={handleEditKeyDown}
+              saveEditHandler={saveEditHandler}
+              dispatch={dispatch}
+            />
+          )}
         </div>
         <Footer />
       </div>
@@ -331,6 +350,12 @@ const styles = {
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'flex-end'
+  },
+  databaseConnecting: {
+    textAlign: 'center',
+    marginTop: '20px',
+    fontSize: '1.7rem',
+    color: '#fff',
   },
 };
 
