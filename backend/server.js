@@ -24,9 +24,9 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 // Middleware setup
 app.use(cors({
   origin: '*', // Allow all origins for development purposes
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'], // Allow specific HTTP methods
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'], // Allow all HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
-})); // Enable CORS with open configuration for development
+})); // Enable CORS with open configuration
 app.use(express.json()); // Parse JSON bodies
 
 // Routes
